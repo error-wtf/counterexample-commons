@@ -70,6 +70,8 @@ Let u(n) = max unit-distance pairs among n planar points.
 
 ## 5. Claim Status System
 
+[Full definitions](references/CLAIM_TO_SOURCE_MATRIX.md)
+
 `SOURCE_DOCUMENTED` · `LOCALLY_REPRODUCED_EXACT` · `LOCALLY_REPRODUCED_NUMERICAL`
 `AI_GENERATED_HYPOTHESIS` · `FORMALLY_VERIFIED` · `REJECTED_OR_FAILED` · `INCONCLUSIVE`
 
@@ -148,8 +150,8 @@ All original material: **Anti-Capitalist Software License (v 1.4)**.
 Copyright © 2026 Lino Casu.
 
 This is source-available anti-capitalist research software, not OSI-defined
-open-source software. See `LICENSE`, `LICENSE_POLICY.md`,
-`THIRD_PARTY_SOURCES_AND_LICENSES.md`.
+open-source software. See [LICENSE](LICENSE), [LICENSE_POLICY.md](LICENSE_POLICY.md),
+[THIRD_PARTY_SOURCES_AND_LICENSES.md](THIRD_PARTY_SOURCES_AND_LICENSES.md).
 
 ## 11. Contributions
 
