@@ -1,0 +1,17 @@
+project:
+  name: Counterexample Commons
+  version: 0.1.0
+  license: ACSL v1.4
+  boundary: E:\clone\counterexample-commons
+  forbidden: E:\clone\book-full
+
+capabilities:
+  line_validation: {claimed: true, implemented: true, tested: true, evidence: SLICE_02_RECAP.md}
+  grid_validation: {claimed: true, implemented: true, tested: true, evidence: SLICE_02_RECAP.md}
+  custom_validation: {claimed: true, implemented: true, tested: true, evidence: SLICE_02_RECAP.md}
+  gradio_ui: {claimed: true, implemented: true, tested: true, evidence: SLICE_03_RECAP.md}
+  execution_modes: {claimed: 6, implemented: 6, tested: true}
+  providers: {claimed: 7, implemented: 7, tested: partial, evidence: SLICE_04_RECAP.md}
+  notebooks: {claimed: 10, implemented: 10, tested: true}
+  ai_pipeline: {claimed: true, implemented: true, tested: true, evidence: SLICE_05_RECAP.md}
+  export: {claimed: true, implemented: true, tested: true}

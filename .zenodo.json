@@ -1,0 +1,23 @@
+{
+  "title": "Counterexample Commons: An Anti-Capitalist AI-Assisted Mathematics Research Lab",
+  "description": "Source-available anti-capitalist research laboratory for exact mathematical validation and controlled AI-assisted exploration, beginning with the 2026 counterexample to Erdős' planar unit-distance conjecture.",
+  "creators": [
+    {
+      "name": "Casu, Lino"
+    }
+  ],
+  "keywords": [
+    "mathematics",
+    "discrete geometry",
+    "unit distance problem",
+    "AI-assisted mathematics",
+    "exact validation",
+    "counterexamples",
+    "anti-capitalist software"
+  ],
+  "license": {
+    "id": "other-open"
+  },
+  "access_right": "open",
+  "upload_type": "software"
+}

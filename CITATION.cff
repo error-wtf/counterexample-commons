@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use Counterexample Commons in research, please cite this repository."
+title: "Counterexample Commons: An Anti-Capitalist AI-Assisted Mathematics Research Lab"
+type: software
+authors:
+  - family-names: "Casu"
+    given-names: "Lino"
+license: "Other"
+abstract: >
+  Counterexample Commons is a source-available anti-capitalist research
+  laboratory for exact mathematical validation and controlled AI-assisted
+  exploration, beginning with the 2026 counterexample to Erdős' planar
+  unit-distance conjecture.
+keywords:
+  - mathematics
+  - discrete geometry
+  - unit distance problem
+  - AI-assisted mathematics
+  - exact validation
+  - counterexamples
+  - anti-capitalist software
+repository-code: "REPOSITORY_URL_PLACEHOLDER"
+url: "PROJECT_URL_PLACEHOLDER"
+version: "0.1.0"
+date-released: "RELEASE_DATE_PLACEHOLDER"

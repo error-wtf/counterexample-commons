@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "counterexample-commons"
+version = "0.1.0"
+description = "Source-available anti-capitalist AI mathematics lab for exact validation and counterexample research."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "Anti-Capitalist Software License (v 1.4)"}
+authors = [
+    {name = "Lino Casu"},
+]
+keywords = [
+    "mathematics",
+    "discrete-geometry",
+    "unit-distance",
+    "AI-assisted",
+    "exact-validation",
+    "anti-capitalist",
+]
+dependencies = [
+    "sympy>=1.13",
+    "numpy>=1.26",
+    "matplotlib>=3.9",
+    "gradio>=5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "flake8>=7.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["counterexample_commons*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503"]
+exclude = [".git", "__pycache__", "build", "dist"]
