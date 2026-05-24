@@ -50,6 +50,9 @@ Let u(n) = max unit-distance pairs among n planar points.
 ![Custom](docs/images/custom.png)
 <br>*Unit Square: 4 points → 4 unit edges*
 
+![Sawin](docs/images/sawin_lattice.png)
+<br>*Sawin lattice*
+
 ## 3. What This Repository Reproduces
 
 | Component | Status |
@@ -80,6 +83,9 @@ Let u(n) = max unit-distance pairs among n planar points.
 Overview · Exact Baselines · Configuration Explorer · AI Candidate Lab ·
 Provider Comparison · Claim Registry · Reports & Export · Settings
 
+![AI Pipeline](docs/images/ai_pipeline.png)
+<br>*AI Experiment Pipeline: From pre-registration to sanitized export*
+
 ## 7. Quick Start: Localhost
 
 ```bash
@@ -106,6 +112,11 @@ python scripts/run_gradio_local.py --mode local-private
 4. **Validate** with exact SymPy rational arithmetic
 5. **Record** all artifacts (including failed runs)
 6. **Export** sanitized reports
+
+### Grid Scaling Analysis
+
+![Grid Scaling](docs/images/grid_scaling.png)
+<br>*Grid k×k scaling: Points vs edges → ratio approaches 2*
 
 ## 7c. Colab Notebooks
 
