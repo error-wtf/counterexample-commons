@@ -124,16 +124,16 @@ See `notebooks/` for 10 ready-to-use Google Colab notebooks:
 
 | Notebook | Purpose |
 |----------|---------|
-| `00_START_HERE_Colab` | Introduction and setup |
-| `00A_Launch_Gradio_UI_in_Colab` | Full UI |
-| `00B_Launch_Public_Baseline_Demo_Only` | Safe demo |
-| `01_Problem_and_Primary_Sources` | Background |
-| `02_Exact_Baseline_Reproduction` | Reproduce results |
-| `03_Interactive_Unit_Distance_Explorer` | Custom configs |
-| `04_Controlled_AI_Construction_Experiment` | Full pipeline |
-| `04A_Compare_Multiple_Providers` | Multi-provider |
-| `04B_Ollama_Local_Execution_Guide` | Local only |
-| `05_Export_Validated_Report` | Export results |
+| [`00_START_HERE_Colab`](notebooks/00_START_HERE_Colab.ipynb) | Introduction and setup |
+| [`00A`](notebooks/00A_Launch_Gradio_UI_in_Colab.ipynb) | Full UI |
+| [`00B`](notebooks/00B_Launch_Public_Baseline_Demo_Only.ipynb) | Safe demo |
+| [`01`](notebooks/01_Problem_and_Primary_Sources.ipynb) | Background |
+| [`02`](notebooks/02_Exact_Baseline_Reproduction.ipynb) | Reproduce |
+| [`03`](notebooks/03_Interactive_Unit_Distance_Explorer.ipynb) | Custom |
+| [`04`](notebooks/04_Controlled_AI_Construction_Experiment.ipynb) | Full pipeline |
+| [`04A`](notebooks/04A_Compare_Multiple_Providers.ipynb) | Multi-provider |
+| [`04B`](notebooks/04B_Ollama_Local_Execution_Guide.ipynb) | Local only |
+| [`05`](notebooks/05_Export_Validated_Report.ipynb) | Export
 
 ## 8. Supported AI Providers (7)
 
