@@ -39,6 +39,17 @@ Let u(n) = max unit-distance pairs among n planar points.
 - **2026:** AI construction achieves n^{1+δ} (fixed δ>0); Sawin: n^{1.014}.
 - **Open:** exact u(n) between n^{1.014} and O(n^{4/3}).
 
+### Visuals
+
+![Line](docs/images/line.png)
+<br>*Line: 5 points → 4 unit edges*
+
+![Grid](docs/images/grid.png)
+<br>*Grid: 3×3 → 12 unit edges*
+
+![Custom](docs/images/custom.png)
+<br>*Unit Square: 4 points → 4 unit edges*
+
 ## 3. What This Repository Reproduces
 
 | Component | Status |
