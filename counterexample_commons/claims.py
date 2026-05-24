@@ -43,11 +43,13 @@ INITIAL_CLAIMS: list[Claim] = [
     Claim(
         claim_id="UD-SAWIN-2026-001",
         statement="Exponent 1.014 achieved explicitly",
-        status=ClaimStatus.SOURCE_DOCUMENTED,
+        status=ClaimStatus.LOCALLY_REPRODUCED_NUMERICAL,
         primary_source="Sawin 2026",
-        locally_validated=False,
-        limitations="Full proof not locally reproduced",
-        last_reviewed="2026-05-23",
+        locally_validated=True,
+        limitations=("Construction: "
+                     "case_studies/erdos_unit_distance_2026/"
+                     "sawin_construction.py"),
+        last_reviewed="2026-05-24",
     ),
     Claim(
         claim_id="UD-OPEN-001",

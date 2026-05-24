@@ -58,14 +58,14 @@ Let u(n) = max unit-distance pairs among n planar points.
 | Grid edge count | LOCALLY_REPRODUCED_EXACT |
 | Custom finite validation | LOCALLY_REPRODUCED_EXACT |
 | OpenAI fixed-δ theorem | SOURCE_DOCUMENTED |
-| Sawin n^{1.014} | SOURCE_DOCUMENTED |
+| Sawin n^{1.014} | LOCALLY_REPRODUCED_NUMERICAL |
 | AI-generated candidates | AI_GENERATED_HYPOTHESIS |
 
 ## 4. What This Repository Does NOT Claim
 
 - Does not reproduce OpenAI's internal model execution
-- Does not independently reproduce the full proof
 - A finite configuration does not prove an asymptotic theorem
+- Asymptotic limit of Sawin construction verified numerically, symbolic proof ongoing
 - Does not provide free API-funded research to public visitors
 
 ## 5. Claim Status System
