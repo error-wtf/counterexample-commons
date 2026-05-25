@@ -57,7 +57,7 @@ distance exactly 1 among n planar points.
   n^{1+δ} for fixed δ>0
 - Companion paper by Alon, Bloom, Gowers, Litt, Sawin et al.
   provides human-verified analysis
-- Sawin gives explicit exponent: n^{1.014}
+- Sawin gives explicit exponent: n^{1.014} (SOURCE_DOCUMENTED; not yet locally reproduced here)
 - Upper bound O(n^{4/3}) remains far above — exact u(n) still open
 
 ### Scientific Integrity

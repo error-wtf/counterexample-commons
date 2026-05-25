@@ -19,7 +19,14 @@ def main():
     parser.add_argument(
         "--mode",
         default="local-private",
-        choices=["local-private", "colab-public-demo", "colab-private"],
+        choices=[
+            "local-private",
+            "local-share",
+            "public-demo",
+            "colab-private",
+            "colab-public-demo",
+            "hosted-public-demo",
+        ],
         help="Execution mode (default: local-private)",
     )
     parser.add_argument(

@@ -50,8 +50,8 @@ Let u(n) = max unit-distance pairs among n planar points.
 ![Custom](docs/images/custom.png)
 <br>*Unit Square: 4 points → 4 unit edges*
 
-![Sawin](docs/images/sawin_lattice.png)
-<br>*Sawin lattice*
+![Rational mesh baseline](docs/images/sawin_lattice.png)
+<br>*Finite rational mesh baseline (not Sawin's construction)*
 
 ## 3. What This Repository Reproduces
 
@@ -61,14 +61,16 @@ Let u(n) = max unit-distance pairs among n planar points.
 | Grid edge count | LOCALLY_REPRODUCED_EXACT |
 | Custom finite validation | LOCALLY_REPRODUCED_EXACT |
 | OpenAI fixed-δ theorem | SOURCE_DOCUMENTED |
-| Sawin n^{1.014} | LOCALLY_REPRODUCED_NUMERICAL |
+| Finite rational mesh baseline | LOCALLY_REPRODUCED_EXACT |
+| Sawin n^{1.014} | SOURCE_DOCUMENTED — not yet locally reproduced |
 | AI-generated candidates | AI_GENERATED_HYPOTHESIS |
 
 ## 4. What This Repository Does NOT Claim
 
 - Does not reproduce OpenAI's internal model execution
 - A finite configuration does not prove an asymptotic theorem
-- Asymptotic limit of Sawin construction verified numerically, symbolic proof ongoing
+- Sawin's explicit exponent n^{1.014} is source-documented only; not yet locally reproduced
+- The rational-mesh code is an exact finite baseline, not Sawin's algebraic-number-theoretic construction
 - Does not provide free API-funded research to public visitors
 
 ## 5. Claim Status System

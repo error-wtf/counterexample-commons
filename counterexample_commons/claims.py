@@ -1,4 +1,4 @@
-"""Claim registry data model."""
+﻿"""Claim registry data model."""
 
 from __future__ import annotations
 
@@ -43,13 +43,34 @@ INITIAL_CLAIMS: list[Claim] = [
     Claim(
         claim_id="UD-SAWIN-2026-001",
         statement="Exponent 1.014 achieved explicitly",
-        status=ClaimStatus.LOCALLY_REPRODUCED_NUMERICAL,
-        primary_source="Sawin 2026",
+        status=ClaimStatus.SOURCE_DOCUMENTED,
+        primary_source="Sawin 2026 arXiv:2605.20579",
+        locally_validated=False,
+        limitations=(
+            "Not yet locally reproduced. Repository contains only exact "
+            "finite rational-grid baselines, not Sawin's algebraic-"
+            "number-theoretic construction. "
+            "See case_studies/erdos_unit_distance_2026/"
+            "SAWIN_REPRODUCTION_ROADMAP.md for planned next steps."
+        ),
+        last_reviewed="2026-05-25",
+    ),
+    Claim(
+        claim_id="UD-BASE-RATIONAL-MESH-001",
+        statement=(
+            "Finite rational mesh configurations can be generated "
+            "and unit-distance edges counted exactly."
+        ),
+        status=ClaimStatus.LOCALLY_REPRODUCED_EXACT,
+        primary_source="Local exact checker",
         locally_validated=True,
-        limitations=("Construction: "
-                     "case_studies/erdos_unit_distance_2026/"
-                     "sawin_construction.py"),
-        last_reviewed="2026-05-24",
+        limitations=(
+            "Finite exact baseline only. Not Sawin's asymptotic "
+            "construction and not evidence for exponent 1.014. "
+            "See case_studies/erdos_unit_distance_2026/"
+            "rational_mesh_baseline.py"
+        ),
+        last_reviewed="2026-05-25",
     ),
     Claim(
         claim_id="UD-OPEN-001",
