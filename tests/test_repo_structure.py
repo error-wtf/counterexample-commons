@@ -1,4 +1,4 @@
-"""Tests that validate repository structure and metadata integrity."""
+﻿"""Tests that validate repository structure and metadata integrity."""
 
 import json
 from pathlib import Path
@@ -154,7 +154,10 @@ class TestNoSecrets:
     def test_no_api_keys_in_source(self):
         prefix = "sk" + "-"
         patterns = [prefix, f"OPENAI_API_KEY={prefix}"]
+        excluded = {".venv", "build", "dist", ".git", "__pycache__"}
         for py_file in ROOT.rglob("*.py"):
+            if any(p in py_file.parts for p in excluded):
+                continue
             if py_file.name == "test_repo_structure.py":
                 continue
             content = py_file.read_text(encoding="utf-8")

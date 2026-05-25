@@ -1,4 +1,4 @@
-project:
+﻿project:
   name: Counterexample Commons
   version: 0.1.0
   license: ACSL v1.4
@@ -15,3 +15,15 @@ capabilities:
   notebooks: {claimed: 10, implemented: 10, tested: true}
   ai_pipeline: {claimed: true, implemented: true, tested: true, evidence: SLICE_05_RECAP.md}
   export: {claimed: true, implemented: true, tested: true}
+  rational_mesh_baseline:
+    claim_id: UD-BASE-RATIONAL-MESH-001
+    status: LOCALLY_REPRODUCED_EXACT
+    implemented: true
+    tested: true
+    note: Finite rational grid; exact sympy edge count; NOT Sawins algebraic construction
+  sawin_construction:
+    claim_id: UD-SAWIN-2026-001
+    status: SOURCE_DOCUMENTED
+    implemented: false
+    tested: true
+    note: NotImplementedError placeholder; local reproduction not achieved; roadmap in SAWIN_REPRODUCTION_ROADMAP.md
