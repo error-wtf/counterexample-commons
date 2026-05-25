@@ -46,11 +46,11 @@ def main():
     mode = AppMode(args.mode)
     share = args.confirm_public_share
 
-    if share and mode == AppMode.LOCAL_PRIVATE:
-        print(
-            "WARNING: Sharing a local-private instance "
-            "exposes configured provider keys to anyone "
-            "with the share link."
+    _private_modes = {AppMode.LOCAL_PRIVATE, AppMode.COLAB_PRIVATE}
+    if share and mode in _private_modes:
+        raise SystemExit(
+            f"Refusing public share: '{mode.value}' may load secrets or "
+            "writable research state. Use a public-demo mode instead."
         )
 
     demo = build_app(mode=mode)

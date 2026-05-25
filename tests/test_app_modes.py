@@ -92,3 +92,26 @@ def test_build_app_all_modes():
     for mode in AppMode:
         demo = build_app(mode=mode)
         assert demo is not None
+
+
+def test_private_modes_refuse_public_share():
+    """local-private and colab-private must refuse --confirm-public-share."""
+    import subprocess
+    import sys
+    for mode in ("local-private", "colab-private"):
+        result = subprocess.run(
+            [
+                sys.executable,
+                "scripts/run_gradio_local.py",
+                "--mode", mode,
+                "--confirm-public-share",
+                "--no-browser",
+            ],
+            capture_output=True,
+            text=True,
+            cwd=str(__import__("pathlib").Path(__file__).resolve().parent.parent),
+        )
+        assert result.returncode != 0, (
+            f"Mode '{mode}' with --confirm-public-share should exit non-zero"
+        )
+        assert "Refusing public share" in result.stderr or "Refusing public share" in result.stdout

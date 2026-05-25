@@ -1,4 +1,4 @@
-"""Build human-readable experiment reports."""
+﻿"""Build human-readable experiment reports."""
 
 from __future__ import annotations
 
@@ -12,28 +12,28 @@ def build_run_report(run_dir: Path) -> str:
 
     meta_path = run_dir / "metadata.json"
     if meta_path.exists():
-        parts.append(f"## Metadata\n\n```json\n"
-                      f"{meta_path.read_text(encoding='utf-8')}\n```\n")
+        text = meta_path.read_text(encoding="utf-8")
+        parts.append(f"## Metadata\n\n```json\n{text}\n```\n")
 
     rq_path = run_dir / "research_question.md"
     if rq_path.exists():
-        parts.append(f"## Research Question\n\n"
-                      f"{rq_path.read_text(encoding='utf-8')}\n")
+        text = rq_path.read_text(encoding="utf-8")
+        parts.append(f"## Research Question\n\n{text}\n")
 
     claim_path = run_dir / "preregistered_claim.md"
     if claim_path.exists():
-        parts.append(f"## Pre-Registered Claim\n\n"
-                      f"{claim_path.read_text(encoding='utf-8')}\n")
+        text = claim_path.read_text(encoding="utf-8")
+        parts.append(f"## Pre-Registered Claim\n\n{text}\n")
 
     result_path = run_dir / "result.json"
     if result_path.exists():
-        parts.append(f"## Result\n\n```json\n"
-                      f"{result_path.read_text(encoding='utf-8')}\n```\n")
+        text = result_path.read_text(encoding="utf-8")
+        parts.append(f"## Result\n\n```json\n{text}\n```\n")
 
     assessment_path = run_dir / "assessment.md"
     if assessment_path.exists():
-        parts.append(f"## Assessment\n\n"
-                      f"{assessment_path.read_text(encoding='utf-8')}\n")
+        text = assessment_path.read_text(encoding="utf-8")
+        parts.append(f"## Assessment\n\n{text}\n")
 
     return "\n".join(parts)
 
