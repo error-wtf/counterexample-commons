@@ -1,0 +1,37 @@
+﻿name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  test:
+    name: Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Run test suite
+        run: python -m pytest tests/ -q --tb=short
+
+      - name: Lint (flake8)
+        run: |
+          flake8 counterexample_commons/ app/ scripts/ --max-line-length=88 --extend-ignore=E203,W503
+
+      - name: Verify Sawin claim integrity
+        run: |
+          python -m pytest tests/test_claims.py::test_sawin_claim_is_source_documented tests/test_claims.py::test_rational_mesh_claim_is_locally_reproduced -v

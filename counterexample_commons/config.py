@@ -31,7 +31,7 @@ CAPABILITY_MATRIX: dict[AppMode, Capabilities] = {
     AppMode.LOCAL_PRIVATE: Capabilities(
         ai_candidate_lab=True,
         provider_comparison=True,
-        claim_registry_editable=True,
+        claim_registry_editable=False,
         export_full=True,
         ollama_local=True,
         secrets_loaded=True,
@@ -64,7 +64,7 @@ CAPABILITY_MATRIX: dict[AppMode, Capabilities] = {
     AppMode.COLAB_PRIVATE: Capabilities(
         ai_candidate_lab=True,
         provider_comparison=True,
-        claim_registry_editable=True,
+        claim_registry_editable=False,
         export_full=True,
         ollama_local=False,  # localhost = Colab VM, not user's PC
         secrets_loaded=True,

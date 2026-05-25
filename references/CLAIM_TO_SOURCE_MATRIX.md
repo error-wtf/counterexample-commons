@@ -6,6 +6,7 @@
 | UD-SAWIN-2026-001 | Exponent 1.014 achieved explicitly | Sawin 2026 | SOURCE_DOCUMENTED | No |
 | UD-OPEN-001 | Full asymptotic u(n) remains open | OpenAI article; Sawin 2026 | SOURCE_DOCUMENTED | No |
 | UD-UPPER-001 | Upper bound O(n^{4/3}) unchanged | Classical (Spencer, Szemerédi, Trotter) | SOURCE_DOCUMENTED | No |
+| UD-BASE-RATIONAL-MESH-001 | Finite rational mesh: generate points, count unit edges exactly | Local exact checker | LOCALLY_REPRODUCED_EXACT | Yes |
 | UD-BASE-001 | Line configuration has n−1 unit edges | Local exact checker | LOCALLY_REPRODUCED_EXACT | Yes |
 | UD-BASE-002 | Square grid k×k has 2k(k−1) unit edges | Local exact checker | LOCALLY_REPRODUCED_EXACT | Yes |
 
@@ -20,3 +21,13 @@
 | FORMALLY_VERIFIED | Machine-checked formal proof (e.g. Lean 4) |
 | REJECTED_OR_FAILED | Attempted and failed validation; preserved for transparency |
 | INCONCLUSIVE | Validation attempted but result indeterminate |
+
+## Upgrade Requirements for UD-SAWIN-2026-001
+
+To upgrade from SOURCE_DOCUMENTED to LOCALLY_REPRODUCED_EXACT, ALL of the following must be completed:
+
+1. Implement Sawin algebraic-number-theoretic construction (see SAWIN_REPRODUCTION_ROADMAP.md)
+2. Run exact SymPy verification on at least one non-trivial instance
+3. Add passing tests in tests/test_sawin.py
+4. Review and sign off by project maintainer
+5. Update this matrix, claims.py, README, and PROJECT_CAPABILITIES.yml atomically
