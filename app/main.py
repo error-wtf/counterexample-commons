@@ -67,7 +67,7 @@ distance exactly 1 among n planar points.
 
 
 def _baselines_tab():
-    gr.Markdown("## Exact Baselines")
+    gr.Markdown("## Exact Finite Baselines\n\n**Boundary:** Finite exact validation only. NOT Sawin's n^1.014 construction.")
 
     with gr.Row():
         with gr.Column():
@@ -161,8 +161,7 @@ def _claims_tab(editable: bool):
     )
 
 
-def _settings_tab(mode: AppMode):
-    caps = CAPABILITY_MATRIX[mode]
+def _settings_tab(mode: AppMode, caps):
     yn = {True: "Yes", False: "No"}
     en = {True: "Enabled", False: "Disabled"}
     gr.Markdown(
@@ -267,7 +266,7 @@ def _provider_comparison_tab(enabled: bool):
     )
 
 
-def _reports_export_tab(enabled: bool):
+def _reports_export_tab(enabled: bool, caps):
     gr.Markdown("## Reports & Export")
 
     if not enabled:
@@ -329,23 +328,21 @@ def build_app(mode: AppMode = AppMode.LOCAL_PRIVATE) -> gr.Blocks:
             with gr.Tab("Configuration Explorer"):
                 _explorer_tab()
 
-            with gr.Tab("AI Candidate Lab"):
-                _ai_candidate_lab_tab(caps.ai_candidate_lab)
+            if caps.ai_candidate_lab:
+                with gr.Tab("AI Candidate Lab"):
+                    _ai_candidate_lab_tab(caps.ai_candidate_lab)
 
-            with gr.Tab("Provider Comparison"):
-                _provider_comparison_tab(
-                    caps.provider_comparison
-                )
+            if caps.provider_comparison:
+                with gr.Tab("Provider Comparison"):
+                    _provider_comparison_tab(caps.provider_comparison)
 
             with gr.Tab("Claim Registry"):
-                _claims_tab(
-                    editable=caps.claim_registry_editable,
-                )
+                _claims_tab(caps.claim_registry_editable)
 
             with gr.Tab("Reports & Export"):
-                _reports_export_tab(caps.export_full)
+                _reports_export_tab(caps.export_full, caps)
 
             with gr.Tab("Settings"):
-                _settings_tab(mode)
+                _settings_tab(mode, caps)
 
     return demo
