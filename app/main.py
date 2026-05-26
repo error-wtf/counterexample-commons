@@ -21,6 +21,7 @@ from counterexample_commons.experiments import (
     sanitize_for_export,
 )
 from counterexample_commons.env_loader import load_local_env
+from counterexample_commons import visualization
 
 SCIENTIFIC_BOUNDARY = (
     "This UI cannot promote hypotheses to proofs. "
@@ -160,6 +161,10 @@ def _claims_tab(editable: bool):
         ],
         interactive=editable,
     )
+
+
+def _visualisierung_tab():
+    gr.Markdown("## Visualisierung\n\nTest.")
 
 
 def _settings_tab(mode: AppMode, caps):
@@ -329,6 +334,9 @@ def build_app(mode: AppMode = AppMode.LOCAL_PRIVATE) -> gr.Blocks:
 
             with gr.Tab("Configuration Explorer"):
                 _explorer_tab()
+
+            with gr.Tab("Visualisierung"):
+                _visualisierung_tab()
 
             # AI tab always visible, shows config status inside
             if caps.ai_candidate_lab or True:
