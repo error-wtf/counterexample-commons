@@ -5,6 +5,7 @@
 [![License: ACSL v1.4](https://img.shields.io/badge/License-ACSL%20v1.4-red.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
 [![Research Status](https://img.shields.io/badge/Status-Experimental-orange.svg)]()
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/rebuild/colab-complete-lab/notebooks/Counterexample_Commons_Complete_Lab_Colab.ipynb)
 
 **Counterexample Commons** is a source-available research laboratory for exact
 mathematical validation and controlled AI-assisted exploration.
