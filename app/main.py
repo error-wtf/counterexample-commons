@@ -20,6 +20,7 @@ from counterexample_commons.experiments import (
     validate_candidate,
     sanitize_for_export,
 )
+from counterexample_commons.env_loader import load_local_env
 
 SCIENTIFIC_BOUNDARY = (
     "This UI cannot promote hypotheses to proofs. "
@@ -307,6 +308,7 @@ def _reports_export_tab(enabled: bool, caps):
 
 def build_app(mode: AppMode = AppMode.LOCAL_PRIVATE) -> gr.Blocks:
     """Build the Gradio application for the given mode."""
+    env_loaded = load_local_env()
     caps = CAPABILITY_MATRIX[mode]
 
     with gr.Blocks(
@@ -328,11 +330,13 @@ def build_app(mode: AppMode = AppMode.LOCAL_PRIVATE) -> gr.Blocks:
             with gr.Tab("Configuration Explorer"):
                 _explorer_tab()
 
-            if caps.ai_candidate_lab:
+            # AI tab always visible, shows config status inside
+            if caps.ai_candidate_lab or True:
                 with gr.Tab("AI Candidate Lab"):
                     _ai_candidate_lab_tab(caps.ai_candidate_lab)
 
-            if caps.provider_comparison:
+            # Provider tab always visible
+            if caps.provider_comparison or True:
                 with gr.Tab("Provider Comparison"):
                     _provider_comparison_tab(caps.provider_comparison)
 
