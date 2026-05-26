@@ -34,14 +34,15 @@ def test_app_has_expected_tabs(demo_app):
 
 
 def test_public_demo_has_disabled_ai_lab():
-    """Public demo should show disabled AI lab message."""
+    """Public demo should NOT show AI lab tab."""
     demo = build_app(mode=AppMode.COLAB_PUBLIC_DEMO)
     assert demo is not None
     tab_labels = []
     for block in demo.blocks.values():
         if hasattr(block, "label") and block.label:
             tab_labels.append(block.label)
-    assert "AI Candidate Lab" in tab_labels
+    assert "AI Candidate Lab" not in tab_labels
+    assert "Provider Comparison" not in tab_labels
 
 
 def test_app_fns_registered(demo_app):
