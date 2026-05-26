@@ -9,4 +9,4 @@ import base64
 
 def plot_configuration(points, edges):
     """Plot points and validated edges."""
-    pass
+    return None
