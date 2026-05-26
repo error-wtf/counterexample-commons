@@ -120,35 +120,30 @@ python scripts/run_gradio_local.py --mode local-private
 ![Grid Scaling](docs/images/grid_scaling.png)
 <br>*Grid k×k scaling: Points vs edges → ratio approaches 2*
 
-## 7c. Colab Notebooks
+## 7c. Google Colab Research Lab — Rebuild in Progress
 
-Colab-targeted notebooks are provided under `notebooks/`. They have been
-validated locally after bootstrap repair. **Fresh Google Colab runtime
-verification is still pending** — each notebook clones and installs this
-repository automatically on first run in Colab.
+The previously published multi-notebook Colab layer has been **withdrawn** as a
+validated public workflow.
 
-### Safe public notebooks (no secrets required)
+Local execution inside an existing repository checkout was incorrectly treated
+as evidence of fresh Google Colab functionality. It is not.
 
-| Notebook | Open in Colab |
-|----------|:---:|
-| [`00_START_HERE_Colab`](notebooks/00_START_HERE_Colab.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/00_START_HERE_Colab.ipynb) |
-| [`00A_Launch_Gradio_UI_in_Colab`](notebooks/00A_Launch_Gradio_UI_in_Colab.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/00A_Launch_Gradio_UI_in_Colab.ipynb) |
-| [`00B_Launch_Public_Baseline_Demo_Only`](notebooks/00B_Launch_Public_Baseline_Demo_Only.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/00B_Launch_Public_Baseline_Demo_Only.ipynb) |
-| [`01_Problem_and_Primary_Sources`](notebooks/01_Problem_and_Primary_Sources.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/01_Problem_and_Primary_Sources.ipynb) |
-| [`02_Exact_Baseline_Reproduction`](notebooks/02_Exact_Baseline_Reproduction.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/02_Exact_Baseline_Reproduction.ipynb) |
-| [`03_Interactive_Unit_Distance_Explorer`](notebooks/03_Interactive_Unit_Distance_Explorer.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/03_Interactive_Unit_Distance_Explorer.ipynb) |
-| [`05_Export_Validated_Report`](notebooks/05_Export_Validated_Report.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/05_Export_Validated_Report.ipynb) |
+The project is now rebuilding the Colab experience as **one complete,
+end-to-end research lab notebook**.
 
-### AI/provider notebooks — optional, private/manual use only
+Current status:
 
-> **No live API calls are enabled by default.** Use Colab Secrets for keys.
-> Never paste keys into notebook cells.
+- Previous ten-notebook Colab layer: **deprecated / not validated**
+- New complete Colab lab: runtime test candidate under development
+- Fresh Google Colab runtime execution: **not yet verified**
+- Live provider/API workflow: not publicly released
+- Sawin n^{1.014}: SOURCE\_DOCUMENTED only, not locally reproduced
 
-| Notebook | Notes |
-|----------|-------|
-| [`04_Controlled_AI_Construction_Experiment`](notebooks/04_Controlled_AI_Construction_Experiment.ipynb) | Requires keys; live cells commented out |
-| [`04A_Compare_Multiple_Providers`](notebooks/04A_Compare_Multiple_Providers.ipynb) | Mock only by default |
-| [`04B_Ollama_Local_Execution_Guide`](notebooks/04B_Ollama_Local_Execution_Guide.ipynb) | Local Ollama only; not available in Colab |
+The deprecated prototype notebooks remain in the repository under
+`notebooks/` for reference but are not advertised as public workflows.
+
+No Open-in-Colab links are published here until the new complete notebook
+passes fresh-runtime verification.
 
 ## 8. Supported AI Providers (7)
 
