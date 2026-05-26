@@ -120,35 +120,54 @@ python scripts/run_gradio_local.py --mode local-private
 ![Grid Scaling](docs/images/grid_scaling.png)
 <br>*Grid k×k scaling: Points vs edges → ratio approaches 2*
 
-## 7c. Colab Notebooks
+## 7c. Google Colab Runtime Validation Candidates
 
-Colab-targeted notebooks are provided under `notebooks/`. They have been
-validated locally after bootstrap repair. **Fresh Google Colab runtime
-verification is still pending** — each notebook clones and installs this
-repository automatically on first run in Colab.
+The Colab notebook layer is currently being rebuilt and tested.
 
-### Safe public notebooks (no secrets required)
+The notebooks linked below are **runtime validation candidates**. They include
+a fresh-runtime bootstrap that clones this repository from the
+`test/colab-runtime-validation` branch and installs it inside a new Google
+Colab session.
 
-| Notebook | Open in Colab |
-|----------|:---:|
-| [`00_START_HERE_Colab`](notebooks/00_START_HERE_Colab.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/00_START_HERE_Colab.ipynb) |
-| [`00A_Launch_Gradio_UI_in_Colab`](notebooks/00A_Launch_Gradio_UI_in_Colab.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/00A_Launch_Gradio_UI_in_Colab.ipynb) |
-| [`00B_Launch_Public_Baseline_Demo_Only`](notebooks/00B_Launch_Public_Baseline_Demo_Only.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/00B_Launch_Public_Baseline_Demo_Only.ipynb) |
-| [`01_Problem_and_Primary_Sources`](notebooks/01_Problem_and_Primary_Sources.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/01_Problem_and_Primary_Sources.ipynb) |
-| [`02_Exact_Baseline_Reproduction`](notebooks/02_Exact_Baseline_Reproduction.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/02_Exact_Baseline_Reproduction.ipynb) |
-| [`03_Interactive_Unit_Distance_Explorer`](notebooks/03_Interactive_Unit_Distance_Explorer.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/03_Interactive_Unit_Distance_Explorer.ipynb) |
-| [`05_Export_Validated_Report`](notebooks/05_Export_Validated_Report.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/05_Export_Validated_Report.ipynb) |
+Current evidence status:
 
-### AI/provider notebooks — optional, private/manual use only
+- Local notebook execution in an existing repository checkout: tested.
+- Fresh Google Colab runtime execution: **not yet verified**.
+- Live provider/API execution in Colab: not executed.
+- Sawin's explicit bound n^{1.014}: source-documented only, not locally reproduced.
 
-> **No live API calls are enabled by default.** Use Colab Secrets for keys.
-> Never paste keys into notebook cells.
+Please do not interpret the notebook links below as a verified Colab release
+until fresh-runtime validation results are published.
 
-| Notebook | Notes |
-|----------|-------|
-| [`04_Controlled_AI_Construction_Experiment`](notebooks/04_Controlled_AI_Construction_Experiment.ipynb) | Requires keys; live cells commented out |
-| [`04A_Compare_Multiple_Providers`](notebooks/04A_Compare_Multiple_Providers.ipynb) | Mock only by default |
-| [`04B_Ollama_Local_Execution_Guide`](notebooks/04B_Ollama_Local_Execution_Guide.ipynb) | Local Ollama only; not available in Colab |
+### A. Public runtime test candidates
+
+> Links point to branch `test/colab-runtime-validation`.
+> Default mode: `colab-public-demo` — no secrets, no provider calls, claim registry read-only.
+
+| Notebook | Open in Colab (test branch) |
+|----------|-----------------------------|
+| [`00_START_HERE_Colab`](notebooks/00_START_HERE_Colab.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/test/colab-runtime-validation/notebooks/00_START_HERE_Colab.ipynb) |
+| [`00B_Launch_Public_Baseline_Demo_Only`](notebooks/00B_Launch_Public_Baseline_Demo_Only.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/test/colab-runtime-validation/notebooks/00B_Launch_Public_Baseline_Demo_Only.ipynb) |
+| [`01_Problem_and_Primary_Sources`](notebooks/01_Problem_and_Primary_Sources.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/test/colab-runtime-validation/notebooks/01_Problem_and_Primary_Sources.ipynb) |
+| [`02_Exact_Baseline_Reproduction`](notebooks/02_Exact_Baseline_Reproduction.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/test/colab-runtime-validation/notebooks/02_Exact_Baseline_Reproduction.ipynb) |
+| [`03_Interactive_Unit_Distance_Explorer`](notebooks/03_Interactive_Unit_Distance_Explorer.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/test/colab-runtime-validation/notebooks/03_Interactive_Unit_Distance_Explorer.ipynb) |
+| [`05_Export_Validated_Report`](notebooks/05_Export_Validated_Report.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/test/colab-runtime-validation/notebooks/05_Export_Validated_Report.ipynb) |
+
+### B. Conditional public test candidate
+
+`00A_Launch_Gradio_UI_in_Colab` — default mode is `colab-public-demo`; no
+provider keys loaded; claim registry read-only. Link will be added after
+fresh-runtime verification confirms the safe default mode.
+
+### C. Private / optional — not public-runtime-validated
+
+> No live API calls by default. Use Colab Secrets for keys if needed.
+
+| Notebook | Status |
+|----------|--------|
+| [`04_Controlled_AI_Construction_Experiment`](notebooks/04_Controlled_AI_Construction_Experiment.ipynb) | `PRIVATE_OPTIONAL_WORKFLOW` — live API disabled by default |
+| [`04A_Compare_Multiple_Providers`](notebooks/04A_Compare_Multiple_Providers.ipynb) | `MOCK_OR_PRIVATE_MANUAL_ONLY` — mock data by default |
+| [`04B_Ollama_Local_Execution_Guide`](notebooks/04B_Ollama_Local_Execution_Guide.ipynb) | `LOCAL_OLLAMA_GUIDE_ONLY` — Ollama not available in Colab |
 
 ## 8. Supported AI Providers (7)
 
