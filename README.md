@@ -20,6 +20,8 @@ This repository does not treat AI output as proof. It separates
 source-documented results from locally reproduced exact calculations,
 exploratory model-generated candidates and rejected or failed experiments.
 
+**Claim Status:** [![SOURCE_DOCUMENTED](https://img.shields.io/badge/SOURCE__DOCUMENTED-blue)]()[![LOCALLY_REPRODUCED_EXACT](https://img.shields.io/badge/LOCALLY__REPRODUCED__EXACT-green)]()[![AI_GENERATED_HYPOTHESIS](https://img.shields.io/badge/AI__GENERATED__HYPOTHESIS-orange)]()[![FORMALLY_VERIFIED](https://img.shields.io/badge/FORMALLY__VERIFIED-purple)]()[![REJECTED_OR_FAILED](https://img.shields.io/badge/REJECTED__OR__FAILED-red)]()[![INCONCLUSIVE](https://img.shields.io/badge/INCONCLUSIVE-grey)]()
+
 Released under the **Anti-Capitalist Software License (v 1.4)**.
 Copyright © 2026 Lino Casu.
 
