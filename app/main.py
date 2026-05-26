@@ -1,4 +1,4 @@
-"""Main Gradio application builder."""
+﻿"""Main Gradio application builder."""
 
 from __future__ import annotations
 
@@ -42,26 +42,26 @@ def _overview_tab():
 ## An Anti-Capitalist AI-Assisted Mathematics Research Lab
 
 **First case study:** The 2026 AI-generated counterexample to
-Erdős' planar unit-distance conjecture.
+ErdÅ‘s' planar unit-distance conjecture.
 
 ### The Problem
 
 Let u(n) be the largest number of unordered pairs at Euclidean
 distance exactly 1 among n planar points.
 
-- **Line:** n collinear unit-spaced points → n−1 edges
-- **Grid:** k×k square grid → 2k(k−1) edges
+- **Line:** n collinear unit-spaced points â†’ nâˆ’1 edges
+- **Grid:** kÃ—k square grid â†’ 2k(kâˆ’1) edges
 - **Historical:** constructions achieving n^{1+C/log log n}
 
 ### What Changed in 2026
 
 - OpenAI announced an AI-generated construction achieving
-  n^{1+δ} for fixed δ>0
+  n^{1+Î´} for fixed Î´>0
 - Companion paper by Alon, Bloom, Gowers, Litt, Sawin et al.
   provides human-verified analysis
 - Sawin gives explicit exponent: n^{1.014}
   (SOURCE_DOCUMENTED; not yet locally reproduced here)
-- Upper bound O(n^{4/3}) remains far above — exact u(n) still open
+- Upper bound O(n^{4/3}) remains far above â€” exact u(n) still open
 
 ### Scientific Integrity
 
@@ -164,7 +164,14 @@ def _claims_tab(editable: bool):
 
 
 def _visualisierung_tab():
-    gr.Markdown("## Visualisierung\n\nTest.")
+    from counterexample_commons import visualization
+    gr.Markdown("""
+## Visualisierung exakt validierter Punktkonfigurationen
+
+Only edges confirmed by exact rational validation are drawn.
+""")
+    
+    source = gr.Dropdown(choices=[\ Line Configuration\,\Square Grid Configuration\,\Rational 3/5-4/5 Example\,\Finite Rational Mesh Baseline\],value=\Square Grid Configuration\,label=\Configuration Source\)
 
 
 def _settings_tab(mode: AppMode, caps):
