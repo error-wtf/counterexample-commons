@@ -122,20 +122,33 @@ python scripts/run_gradio_local.py --mode local-private
 
 ## 7c. Colab Notebooks
 
-See `notebooks/` for 10 ready-to-use Google Colab notebooks:
+Colab-targeted notebooks are provided under `notebooks/`. They have been
+validated locally after bootstrap repair. **Fresh Google Colab runtime
+verification is still pending** — each notebook clones and installs this
+repository automatically on first run in Colab.
 
-| Notebook | Purpose |
-|----------|---------|
-| [`00_START_HERE_Colab`](notebooks/00_START_HERE_Colab.ipynb) | Introduction and setup |
-| [`00A_Launch_Gradio_UI_in_Colab`](notebooks/00A_Launch_Gradio_UI_in_Colab.ipynb) | Full UI |
-| [`00B_Launch_Public_Baseline_Demo_Only`](notebooks/00B_Launch_Public_Baseline_Demo_Only.ipynb) | Safe demo |
-| [`01_Problem_and_Primary_Sources`](notebooks/01_Problem_and_Primary_Sources.ipynb) | Background |
-| [`02_Exact_Baseline_Reproduction`](notebooks/02_Exact_Baseline_Reproduction.ipynb) | Reproduce |
-| [`03_Interactive_Unit_Distance_Explorer`](notebooks/03_Interactive_Unit_Distance_Explorer.ipynb) | Custom |
-| [`04_Controlled_AI_Construction_Experiment`](notebooks/04_Controlled_AI_Construction_Experiment.ipynb) | Full pipeline |
-| [`04A_Compare_Multiple_Providers`](notebooks/04A_Compare_Multiple_Providers.ipynb) | Multi-provider |
-| [`04B_Ollama_Local_Execution_Guide`](notebooks/04B_Ollama_Local_Execution_Guide.ipynb) | Local only |
-| [`05_Export_Validated_Report`](notebooks/05_Export_Validated_Report.ipynb) | Export
+### Safe public notebooks (no secrets required)
+
+| Notebook | Open in Colab |
+|----------|:---:|
+| [`00_START_HERE_Colab`](notebooks/00_START_HERE_Colab.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/00_START_HERE_Colab.ipynb) |
+| [`00A_Launch_Gradio_UI_in_Colab`](notebooks/00A_Launch_Gradio_UI_in_Colab.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/00A_Launch_Gradio_UI_in_Colab.ipynb) |
+| [`00B_Launch_Public_Baseline_Demo_Only`](notebooks/00B_Launch_Public_Baseline_Demo_Only.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/00B_Launch_Public_Baseline_Demo_Only.ipynb) |
+| [`01_Problem_and_Primary_Sources`](notebooks/01_Problem_and_Primary_Sources.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/01_Problem_and_Primary_Sources.ipynb) |
+| [`02_Exact_Baseline_Reproduction`](notebooks/02_Exact_Baseline_Reproduction.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/02_Exact_Baseline_Reproduction.ipynb) |
+| [`03_Interactive_Unit_Distance_Explorer`](notebooks/03_Interactive_Unit_Distance_Explorer.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/03_Interactive_Unit_Distance_Explorer.ipynb) |
+| [`05_Export_Validated_Report`](notebooks/05_Export_Validated_Report.ipynb) | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/05_Export_Validated_Report.ipynb) |
+
+### AI/provider notebooks — optional, private/manual use only
+
+> **No live API calls are enabled by default.** Use Colab Secrets for keys.
+> Never paste keys into notebook cells.
+
+| Notebook | Notes |
+|----------|-------|
+| [`04_Controlled_AI_Construction_Experiment`](notebooks/04_Controlled_AI_Construction_Experiment.ipynb) | Requires keys; live cells commented out |
+| [`04A_Compare_Multiple_Providers`](notebooks/04A_Compare_Multiple_Providers.ipynb) | Mock only by default |
+| [`04B_Ollama_Local_Execution_Guide`](notebooks/04B_Ollama_Local_Execution_Guide.ipynb) | Local Ollama only; not available in Colab |
 
 ## 8. Supported AI Providers (7)
 
