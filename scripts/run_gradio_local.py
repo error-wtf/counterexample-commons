@@ -41,19 +41,43 @@ def main():
         "--confirm-public-share", action="store_true",
         help="Required to enable a public share link",
     )
+    parser.add_argument(
+        "--confirm-live-ai-share", action="store_true",
+        help="Required to share a local-private live-AI session",
+    )
     args = parser.parse_args()
 
     mode = AppMode(args.mode)
-    share = args.confirm_public_share
+    share = args.confirm_public_share or args.confirm_live_ai_share
 
     _private_modes = {AppMode.LOCAL_PRIVATE, AppMode.COLAB_PRIVATE}
-    if share and mode in _private_modes:
+    if args.confirm_public_share and mode in _private_modes:
         raise SystemExit(
             f"Refusing public share: '{mode.value}' may load secrets or "
             "writable research state. Use a public-demo mode instead."
         )
+    if args.confirm_live_ai_share and mode != AppMode.LOCAL_PRIVATE:
+        raise SystemExit(
+            "--confirm-live-ai-share is only valid with local-private mode."
+        )
+    if args.confirm_live_ai_share:
+        print("WARNING - SHARED LIVE AI SESSION")
+        print()
+        print(
+            "This running Gradio session may send real requests to "
+            "configured AI providers."
+        )
+        print(
+            "Anyone with access to the shared URL may be able to trigger "
+            "API requests, consume quota or incur cost."
+        )
+        print("Provider keys are not displayed or exported.")
+        print()
 
-    demo = build_app(mode=mode)
+    demo = build_app(
+        mode=mode,
+        live_ai_share=args.confirm_live_ai_share,
+    )
     demo.queue().launch(
         server_name="127.0.0.1",
         server_port=args.port,

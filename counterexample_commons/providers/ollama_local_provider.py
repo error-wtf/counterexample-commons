@@ -2,7 +2,12 @@
 
 from __future__ import annotations
 
+import json
+import urllib.error
+import urllib.request
+
 from .base import GenerationRequest, GenerationResponse
+from .errors import ProviderConnectionError, ProviderResponseError
 
 
 class OllamaLocalProvider:
@@ -26,11 +31,39 @@ class OllamaLocalProvider:
         return ""
 
     def is_available(self) -> bool:
-        # In a real implementation, this would ping the local server.
-        # We don't make network calls during import or test.
         return False
 
     def generate(self, request: GenerationRequest) -> GenerationResponse:
-        raise NotImplementedError(
-            "Live Ollama Local calls require explicit user action"
+        payload = json.dumps({
+            "model": request.model,
+            "prompt": request.prompt,
+            "stream": False,
+            "options": {
+                "temperature": request.temperature,
+                "num_predict": request.max_tokens,
+            },
+        }).encode("utf-8")
+        req = urllib.request.Request(
+            self._base_url.rstrip("/") + "/api/generate",
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=60) as response:
+                body = response.read().decode("utf-8")
+        except urllib.error.URLError as exc:
+            reason = exc.reason.__class__.__name__
+            raise ProviderConnectionError(f"NETWORK_{reason}") from None
+
+        try:
+            data = json.loads(body)
+            text = str(data["response"])
+        except (json.JSONDecodeError, KeyError, TypeError) as exc:
+            raise ProviderResponseError("INVALID_OLLAMA_RESPONSE") from exc
+        return GenerationResponse(
+            provider_name=self.name,
+            model=request.model,
+            raw_text=text,
+            finish_reason=str(data.get("done_reason", "unknown")),
         )

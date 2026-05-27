@@ -82,8 +82,9 @@ Let u(n) = max unit-distance pairs among n planar points.
 
 ## 6. Main User Interface (Gradio)
 
-Overview · Exact Baselines · Configuration Explorer · AI Candidate Lab ·
-Provider Comparison · Claim Registry · Reports & Export · Settings
+Overview · Exact Baselines · Configuration Explorer · Visualisierung ·
+AI Candidate Lab · Provider Comparison · Claim Registry · Reports & Export ·
+Settings
 
 ![AI Pipeline](docs/images/ai_pipeline.png)
 <br>*AI Experiment Pipeline: From pre-registration to sanitized export*
@@ -93,6 +94,25 @@ Provider Comparison · Claim Registry · Reports & Export · Settings
 ```bash
 pip install -r requirements.txt
 python scripts/run_gradio_local.py --mode local-private
+```
+
+Without `.env`, the app runs as a complete safe no-key finite-validation lab:
+Exact Baselines, Explorer, Visualisierung, read-only claims and finite exports
+remain available; AI/provider actions report `NOT_CONFIGURED` and make no live
+request.
+
+For private local provider testing:
+
+```bash
+cp .env.example .env
+python scripts/run_gradio_local.py --mode local-private --no-browser --port 7861
+```
+
+Provider keys are never displayed or exported. A shared live-AI session requires
+an explicit warning flag:
+
+```bash
+python scripts/run_gradio_local.py --mode local-private --confirm-live-ai-share --port 7861
 ```
 
 ## 7a. Six Execution Modes
@@ -114,6 +134,11 @@ python scripts/run_gradio_local.py --mode local-private
 4. **Validate** with exact SymPy rational arithmetic
 5. **Record** all artifacts (including failed runs)
 6. **Export** sanitized reports
+
+Current AI Lab scope: finite rational point candidates only. It does not
+attempt the algebraic-number-theoretic construction used in the OpenAI proof,
+does not reproduce Sawin's `n^{1.014}` result, and does not establish
+asymptotic bounds.
 
 ### Grid Scaling Analysis
 

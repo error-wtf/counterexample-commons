@@ -6,6 +6,7 @@ import os
 
 from .base import GenerationRequest, GenerationResponse
 from .errors import ProviderNotConfiguredError
+from .ollama_local_provider import OllamaLocalProvider
 
 
 class OllamaCloudProvider:
@@ -31,6 +32,10 @@ class OllamaCloudProvider:
             raise ProviderNotConfiguredError(
                 f"{self.api_key_env_var} not set"
             )
-        raise NotImplementedError(
-            "Live Ollama Cloud calls require explicit user action"
+        base_url = os.environ.get(
+            "OLLAMA_CLOUD_BASE_URL",
+            "https://ollama.com",
         )
+        # Hosted Ollama-compatible endpoints vary by account. Use the same
+        # request shape as local Ollama and rely on sanitized failures.
+        return OllamaLocalProvider(base_url).generate(request)

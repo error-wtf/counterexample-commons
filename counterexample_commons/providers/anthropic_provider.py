@@ -6,6 +6,7 @@ import os
 
 from .base import GenerationRequest, GenerationResponse
 from .errors import ProviderNotConfiguredError
+from .http_json import anthropic_text, post_json
 
 
 class AnthropicProvider:
@@ -31,6 +32,25 @@ class AnthropicProvider:
             raise ProviderNotConfiguredError(
                 f"{self.api_key_env_var} not set"
             )
-        raise NotImplementedError(
-            "Live Anthropic calls require explicit user action"
+        data = post_json(
+            "https://api.anthropic.com/v1/messages",
+            {
+                "x-api-key": os.environ[self.api_key_env_var],
+                "anthropic-version": "2023-06-01",
+            },
+            {
+                "model": request.model,
+                "max_tokens": request.max_tokens,
+                "temperature": request.temperature,
+                "messages": [
+                    {"role": "user", "content": request.prompt},
+                ],
+            },
+        )
+        return GenerationResponse(
+            provider_name=self.name,
+            model=request.model,
+            raw_text=anthropic_text(data),
+            finish_reason=str(data.get("stop_reason", "unknown")),
+            usage=data.get("usage", {}),
         )
