@@ -50,7 +50,7 @@ Let u(n) = max unit-distance pairs among n planar points.
 ![Custom](docs/images/custom.png)
 <br>*Unit Square: 4 points → 4 unit edges*
 
-![Rational mesh baseline](docs/images/sawin_lattice.png)
+![Rational mesh baseline](docs/images/rational_mesh_baseline.png)
 <br>*Finite rational mesh baseline (not Sawin's construction)*
 
 ## 3. What This Repository Reproduces
