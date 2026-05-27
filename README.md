@@ -156,7 +156,7 @@ as evidence of fresh Google Colab functionality. It is not.
 The rescue branch now contains **one complete, end-to-end research lab
 notebook** that launches the same Gradio app in safe no-key public-demo mode:
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/rescue/integrated-complete-lab/notebooks/Counterexample_Commons_Complete_Lab_Colab.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/Counterexample_Commons_Complete_Lab_Colab.ipynb)
 
 Current status:
 
@@ -169,9 +169,9 @@ Current status:
 The deprecated prototype notebooks remain in the repository under
 `notebooks/` for reference but are not advertised as public workflows.
 
-The complete notebook clones `rescue/integrated-complete-lab` and starts the
-same local-first Gradio lab in `colab-public-demo` mode. It must not be read as
-evidence that the asymptotic OpenAI/Sawin theorem has been locally reproduced.
+The complete notebook clones `main` and starts the same local-first Gradio lab
+in `colab-public-demo` mode. It must not be read as evidence that the
+asymptotic OpenAI/Sawin theorem has been locally reproduced.
 
 ## 8. Supported AI Providers (7)
 

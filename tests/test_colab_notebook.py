@@ -31,7 +31,8 @@ def test_complete_colab_notebook_exists():
 
 def test_complete_colab_targets_rescue_branch():
     text = _all_source_text()
-    assert 'REPO_BRANCH = "rescue/integrated-complete-lab"' in text
+    assert 'REPO_BRANCH = "main"' in text
+    assert "rescue/integrated-complete-lab" not in text
     assert "rebuild/colab-complete-lab" not in text
 
 
