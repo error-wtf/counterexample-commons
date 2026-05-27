@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import gradio as gr
+from sympy import Rational
 
 from counterexample_commons.config import (
     AppMode,
@@ -12,15 +13,22 @@ from counterexample_commons.validators import (
     validate_line_configuration,
     validate_grid_configuration,
     validate_custom_configuration,
+    count_unit_edges_exact,
 )
 from counterexample_commons.claims import INITIAL_CLAIMS
 from counterexample_commons.providers import build_default_registry
+from counterexample_commons.validated_result import (
+    ValidatedConfigurationResult,
+)
+from counterexample_commons.visualization import plot_from_result
 from counterexample_commons.experiments import (
     extract_candidate_coordinates,
     validate_candidate,
     sanitize_for_export,
 )
-
+from case_studies.erdos_unit_distance_2026.rational_mesh_baseline import (
+    rational_mesh_points,
+)
 SCIENTIFIC_BOUNDARY = (
     "This UI cannot promote hypotheses to proofs. "
     "Exact finite validation is not an asymptotic theorem. "
@@ -32,6 +40,161 @@ SECURITY_WARNING = (
     "receives the link. Public demo mode disables "
     "external AI API calls and secret use."
 )
+
+
+RATIONAL_MESH_BOUNDARY = (
+    "Finite rational mesh baseline — not Sawin's construction. "
+    "Finite exact validation only; not evidence for exponent n^1.014."
+)
+FINITE_SCOPE = "Finite exact validation only."
+RATIONAL_345_SCOPE = (
+    "Exact rational non-axis unit-distance example. "
+    "The displacement (3/5, 4/5) is validated exactly. "
+    "Finite exact validation only."
+)
+
+
+def _points_to_strings(points):
+    return [(str(x), str(y)) for x, y in points]
+
+
+def _validated_result_from_points(
+    name: str,
+    points,
+    scientific_scope: str,
+    source_kind: str = "baseline",
+) -> ValidatedConfigurationResult:
+    edge_count, edges = count_unit_edges_exact(points)
+    return ValidatedConfigurationResult(
+        name=name,
+        points=_points_to_strings(points),
+        exact_edges=edges,
+        edge_count=edge_count,
+        validation_status="LOCALLY_REPRODUCED_EXACT",
+        scientific_scope=scientific_scope,
+        source_kind=source_kind,
+    )
+
+
+def line_baseline_result(n: int) -> ValidatedConfigurationResult:
+    """Validate a finite line configuration through the exact path."""
+    points = [(Rational(i), Rational(0)) for i in range(int(n))]
+    return _validated_result_from_points(
+        "Line Configuration",
+        points,
+        FINITE_SCOPE,
+    )
+
+
+def square_grid_baseline_result(k: int) -> ValidatedConfigurationResult:
+    """Validate a finite square grid through the exact path."""
+    points = [
+        (Rational(i), Rational(j))
+        for i in range(int(k))
+        for j in range(int(k))
+    ]
+    return _validated_result_from_points(
+        "Square Grid Configuration",
+        points,
+        FINITE_SCOPE,
+    )
+
+
+def rational_345_baseline_result() -> ValidatedConfigurationResult:
+    """Validate the exact rational 3/5-4/5 example."""
+    points = [
+        (Rational(0), Rational(0)),
+        (Rational(3, 5), Rational(4, 5)),
+        (Rational(1), Rational(0)),
+    ]
+    return _validated_result_from_points(
+        "Rational 3/5–4/5 Example",
+        points,
+        RATIONAL_345_SCOPE,
+    )
+
+
+def rational_mesh_baseline_result(m: int) -> ValidatedConfigurationResult:
+    """Validate the finite rational mesh baseline through the exact path."""
+    return _validated_result_from_points(
+        "Finite Rational Mesh Baseline",
+        rational_mesh_points(int(m)),
+        RATIONAL_MESH_BOUNDARY,
+    )
+
+
+def package_a_baseline_results(
+    line_n: int,
+    grid_k: int,
+    mesh_m: int,
+) -> list[ValidatedConfigurationResult]:
+    """Return all Package-A baseline results."""
+    return [
+        line_baseline_result(line_n),
+        square_grid_baseline_result(grid_k),
+        rational_345_baseline_result(),
+        rational_mesh_baseline_result(mesh_m),
+    ]
+
+
+def package_a_baseline_table_rows(results) -> list[list[str | int]]:
+    """Return readable rows for the Exact Baselines tab."""
+    return [result.to_table_row() for result in results]
+
+
+def package_a_result_summary(result: ValidatedConfigurationResult) -> str:
+    """Return a UI summary for a validated configuration."""
+    return result.to_summary_markdown()
+
+
+def package_a_visualize_source(
+    source_name: str,
+    line_n: int,
+    grid_k: int,
+    mesh_m: int,
+    show_labels: bool,
+    show_edges: bool,
+    show_grid: bool,
+    latest_explorer,
+    latest_ai,
+):
+    """Validate and visualize a Package-A source selection."""
+    if source_name == "Line Configuration":
+        result = line_baseline_result(line_n)
+    elif source_name == "Square Grid Configuration":
+        result = square_grid_baseline_result(grid_k)
+    elif source_name == "Rational 3/5–4/5 Example":
+        result = rational_345_baseline_result()
+    elif source_name == "Finite Rational Mesh Baseline":
+        result = rational_mesh_baseline_result(mesh_m)
+    elif source_name == "Latest Explorer Result":
+        if not latest_explorer:
+            return (
+                None,
+                "No validated Explorer result available in this session.",
+                {},
+            )
+        result = ValidatedConfigurationResult.from_state_dict(
+            latest_explorer,
+        )
+    elif source_name == "Latest AI Candidate Result":
+        if not latest_ai:
+            return (
+                None,
+                "No validated AI candidate available in this session.",
+                {},
+            )
+        result = ValidatedConfigurationResult.from_state_dict(latest_ai)
+    else:
+        raise ValueError(f"Unknown configuration source: {source_name}")
+
+    fig = plot_from_result(
+        result,
+        show_labels=show_labels,
+        show_edges=show_edges,
+        show_grid=show_grid,
+    )
+    return fig, package_a_result_summary(result), result.to_state_dict()
 
 
 def _overview_tab():
@@ -67,36 +230,140 @@ distance exactly 1 among n planar points.
 
 
 def _baselines_tab():
-    gr.Markdown("## Exact Baselines")
+    gr.Markdown(
+        "## Exact Baselines\n\n"
+        "All rows are produced by the existing exact rational validator."
+    )
 
     with gr.Row():
-        with gr.Column():
-            gr.Markdown("### Line Configuration")
-            n_line = gr.Slider(
-                2, 100, value=16, step=1, label="n (points)"
-            )
-            btn_line = gr.Button("Validate Line")
-            out_line = gr.JSON(label="Result")
-            btn_line.click(
-                fn=lambda n: validate_line_configuration(int(n)),
-                inputs=n_line,
-                outputs=out_line,
-                api_name="validate_line_configuration",
-            )
+        n_line = gr.Slider(
+            2, 100, value=16, step=1, label="Line Configuration n"
+        )
+        k_grid = gr.Slider(
+            2, 20, value=4, step=1, label="Square Grid k"
+        )
+        m_mesh = gr.Slider(
+            1, 12, value=10, step=1, label="Rational Mesh m"
+        )
+    btn = gr.Button("Validate All Exact Baselines")
+    table = gr.Dataframe(
+        headers=[
+            "Configuration",
+            "Points",
+            "Exact unit-distance edges",
+            "Status",
+            "Scientific scope",
+        ],
+        interactive=False,
+        label="Exact finite baseline results",
+    )
+    summary = gr.Markdown()
+    technical = gr.JSON(label="Validated baseline state")
+    latest_state = gr.State(None)
 
-        with gr.Column():
-            gr.Markdown("### Square Grid Configuration")
-            k_grid = gr.Slider(
-                2, 20, value=4, step=1, label="k (grid side)"
-            )
-            btn_grid = gr.Button("Validate Grid")
-            out_grid = gr.JSON(label="Result")
-            btn_grid.click(
-                fn=lambda k: validate_grid_configuration(int(k)),
-                inputs=k_grid,
-                outputs=out_grid,
-                api_name="validate_grid_configuration",
-            )
+    def _run(line_n, grid_k, mesh_m):
+        results = package_a_baseline_results(
+            int(line_n),
+            int(grid_k),
+            int(mesh_m),
+        )
+        latest = results[-1]
+        state = {
+            result.name: result.to_state_dict()
+            for result in results
+        }
+        summary_text = "\n\n---\n\n".join(
+            result.to_summary_markdown() for result in results
+        )
+        return (
+            package_a_baseline_table_rows(results),
+            summary_text,
+            state,
+            latest.to_state_dict(),
+        )
+
+    btn.click(
+        fn=_run,
+        inputs=[n_line, k_grid, m_mesh],
+        outputs=[table, summary, technical, latest_state],
+        api_name="validate_all_exact_baselines",
+    )
+    # Keep existing public API names available while the UI moves to the
+    # consolidated four-baseline workflow.
+    legacy_line = gr.Button(visible=False)
+    legacy_grid = gr.Button(visible=False)
+    legacy_line_out = gr.JSON(visible=False)
+    legacy_grid_out = gr.JSON(visible=False)
+    legacy_line.click(
+        fn=lambda n: validate_line_configuration(int(n)),
+        inputs=n_line,
+        outputs=legacy_line_out,
+        api_name="validate_line_configuration",
+    )
+    legacy_grid.click(
+        fn=lambda k: validate_grid_configuration(int(k)),
+        inputs=k_grid,
+        outputs=legacy_grid_out,
+        api_name="validate_grid_configuration",
+    )
+    return latest_state
+
+
+def _visualisierung_tab(explorer_state, ai_state):
+    gr.Markdown(
+        "## Visualisierung exakt validierter Punktkonfigurationen\n\n"
+        "Only edges confirmed by exact rational validation are drawn."
+    )
+    source = gr.Dropdown(
+        choices=[
+            "Line Configuration",
+            "Square Grid Configuration",
+            "Rational 3/5–4/5 Example",
+            "Finite Rational Mesh Baseline",
+            "Latest Explorer Result",
+            "Latest AI Candidate Result",
+        ],
+        value="Finite Rational Mesh Baseline",
+        label="Configuration Source",
+    )
+    with gr.Row():
+        line_n = gr.Slider(
+            2, 50, value=16, step=1, label="Line Configuration n"
+        )
+        grid_k = gr.Slider(
+            2, 12, value=4, step=1, label="Square Grid k"
+        )
+        mesh_m = gr.Slider(
+            1, 12, value=10, step=1, label="Rational Mesh m"
+        )
+    with gr.Row():
+        labels = gr.Checkbox(value=True, label="Show point labels")
+        edges = gr.Checkbox(
+            value=True,
+            label="Show validated unit-distance edges",
+        )
+        grid = gr.Checkbox(value=True, label="Show coordinate grid")
+    btn = gr.Button("Validate and Visualize")
+    plot = gr.Plot(label="Visualization")
+    summary = gr.Markdown()
+    technical = gr.JSON(label="Validated visualization data")
+
+    btn.click(
+        fn=package_a_visualize_source,
+        inputs=[
+            source,
+            line_n,
+            grid_k,
+            mesh_m,
+            labels,
+            edges,
+            grid,
+            explorer_state,
+            ai_state,
+        ],
+        outputs=[plot, summary, technical],
+        api_name="visualize_exact_baseline",
+    )
 
 
 def _explorer_tab():
@@ -318,6 +585,8 @@ def build_app(mode: AppMode = AppMode.LOCAL_PRIVATE) -> gr.Blocks:
             "*Exact Validation and Anti-Capitalist "
             "AI-Assisted Mathematics Research*"
         )
+        explorer_state = gr.State(None)
+        ai_state = gr.State(None)
 
         with gr.Tabs():
             with gr.Tab("Overview"):
@@ -328,6 +597,9 @@ def build_app(mode: AppMode = AppMode.LOCAL_PRIVATE) -> gr.Blocks:
 
             with gr.Tab("Configuration Explorer"):
                 _explorer_tab()
+
+            with gr.Tab("Visualisierung"):
+                _visualisierung_tab(explorer_state, ai_state)
 
             with gr.Tab("AI Candidate Lab"):
                 _ai_candidate_lab_tab(caps.ai_candidate_lab)
