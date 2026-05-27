@@ -1,5 +1,9 @@
 """Tests for application mode configuration and capability matrix."""
 
+import subprocess
+import sys
+from pathlib import Path
+
 import pytest
 
 from counterexample_commons.config import (
@@ -96,8 +100,6 @@ def test_build_app_all_modes():
 
 def test_private_modes_refuse_public_share():
     """local-private and colab-private must refuse --confirm-public-share."""
-    import subprocess
-    import sys
     for mode in ("local-private", "colab-private"):
         result = subprocess.run(
             [
@@ -109,9 +111,12 @@ def test_private_modes_refuse_public_share():
             ],
             capture_output=True,
             text=True,
-            cwd=str(__import__("pathlib").Path(__file__).resolve().parent.parent),
+            cwd=str(Path(__file__).resolve().parent.parent),
         )
         assert result.returncode != 0, (
             f"Mode '{mode}' with --confirm-public-share should exit non-zero"
         )
-        assert "Refusing public share" in result.stderr or "Refusing public share" in result.stdout
+        assert (
+            "Refusing public share" in result.stderr
+            or "Refusing public share" in result.stdout
+        )

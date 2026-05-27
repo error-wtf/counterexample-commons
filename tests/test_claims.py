@@ -73,12 +73,18 @@ def test_claim_dataclass_fields():
 
 
 def test_sawin_claim_is_source_documented():
-    sawin = next(c for c in INITIAL_CLAIMS if c.claim_id == "UD-SAWIN-2026-001")
+    sawin = next(
+        c for c in INITIAL_CLAIMS
+        if c.claim_id == "UD-SAWIN-2026-001"
+    )
     assert sawin.status == ClaimStatus.SOURCE_DOCUMENTED
     assert sawin.locally_validated is False
 
 
 def test_rational_mesh_claim_is_locally_reproduced():
-    rm = next(c for c in INITIAL_CLAIMS if c.claim_id == "UD-BASE-RATIONAL-MESH-001")
+    rm = next(
+        c for c in INITIAL_CLAIMS
+        if c.claim_id == "UD-BASE-RATIONAL-MESH-001"
+    )
     assert rm.status == ClaimStatus.LOCALLY_REPRODUCED_EXACT
     assert rm.locally_validated is True
