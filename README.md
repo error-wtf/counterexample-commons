@@ -50,7 +50,7 @@ Let u(n) = max unit-distance pairs among n planar points.
 ![Custom](docs/images/custom.png)
 <br>*Unit Square: 4 points → 4 unit edges*
 
-![Rational mesh baseline](docs/images/sawin_lattice.png)
+![Rational mesh baseline](docs/images/rational_mesh_baseline.png)
 <br>*Finite rational mesh baseline (not Sawin's construction)*
 
 ## 3. What This Repository Reproduces
@@ -82,8 +82,9 @@ Let u(n) = max unit-distance pairs among n planar points.
 
 ## 6. Main User Interface (Gradio)
 
-Overview · Exact Baselines · Configuration Explorer · AI Candidate Lab ·
-Provider Comparison · Claim Registry · Reports & Export · Settings
+Overview · Exact Baselines · Configuration Explorer · Visualisierung ·
+AI Candidate Lab · Provider Comparison · Claim Registry · Reports & Export ·
+Settings
 
 ![AI Pipeline](docs/images/ai_pipeline.png)
 <br>*AI Experiment Pipeline: From pre-registration to sanitized export*
@@ -93,6 +94,25 @@ Provider Comparison · Claim Registry · Reports & Export · Settings
 ```bash
 pip install -r requirements.txt
 python scripts/run_gradio_local.py --mode local-private
+```
+
+Without `.env`, the app runs as a complete safe no-key finite-validation lab:
+Exact Baselines, Explorer, Visualisierung, read-only claims and finite exports
+remain available; AI/provider actions report `NOT_CONFIGURED` and make no live
+request.
+
+For private local provider testing:
+
+```bash
+cp .env.example .env
+python scripts/run_gradio_local.py --mode local-private --no-browser --port 7861
+```
+
+Provider keys are never displayed or exported. A shared live-AI session requires
+an explicit warning flag:
+
+```bash
+python scripts/run_gradio_local.py --mode local-private --confirm-live-ai-share --port 7861
 ```
 
 ## 7a. Six Execution Modes
@@ -115,12 +135,17 @@ python scripts/run_gradio_local.py --mode local-private
 5. **Record** all artifacts (including failed runs)
 6. **Export** sanitized reports
 
+Current AI Lab scope: finite rational point candidates only. It does not
+attempt the algebraic-number-theoretic construction used in the OpenAI proof,
+does not reproduce Sawin's `n^{1.014}` result, and does not establish
+asymptotic bounds.
+
 ### Grid Scaling Analysis
 
 ![Grid Scaling](docs/images/grid_scaling.png)
 <br>*Grid k×k scaling: Points vs edges → ratio approaches 2*
 
-## 7c. Google Colab Research Lab — Rebuild in Progress
+## 7c. Google Colab Research Lab — Complete Lab Candidate
 
 The previously published multi-notebook Colab layer has been **withdrawn** as a
 validated public workflow.
@@ -128,22 +153,25 @@ validated public workflow.
 Local execution inside an existing repository checkout was incorrectly treated
 as evidence of fresh Google Colab functionality. It is not.
 
-The project is now rebuilding the Colab experience as **one complete,
-end-to-end research lab notebook**.
+The rescue branch now contains **one complete, end-to-end research lab
+notebook** that launches the same Gradio app in safe no-key public-demo mode:
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/Counterexample_Commons_Complete_Lab_Colab.ipynb)
 
 Current status:
 
 - Previous ten-notebook Colab layer: **deprecated / not validated**
-- New complete Colab lab: runtime test candidate under development
-- Fresh Google Colab runtime execution: **not yet verified**
-- Live provider/API workflow: not publicly released
+- New complete Colab lab: integrated as a no-key runtime test candidate
+- Fresh Google Colab runtime execution by the user: **awaiting validation**
+- Live provider/API workflow: not part of the public Colab demo
 - Sawin n^{1.014}: SOURCE\_DOCUMENTED only, not locally reproduced
 
 The deprecated prototype notebooks remain in the repository under
 `notebooks/` for reference but are not advertised as public workflows.
 
-No Open-in-Colab links are published here until the new complete notebook
-passes fresh-runtime verification.
+The complete notebook clones `main` and starts the same local-first Gradio lab
+in `colab-public-demo` mode. It must not be read as evidence that the
+asymptotic OpenAI/Sawin theorem has been locally reproduced.
 
 ## 8. Supported AI Providers (7)
 

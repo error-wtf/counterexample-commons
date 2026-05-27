@@ -23,6 +23,7 @@ def test_app_has_expected_tabs(demo_app):
         "Overview",
         "Exact Baselines",
         "Configuration Explorer",
+        "Visualisierung",
         "AI Candidate Lab",
         "Provider Comparison",
         "Claim Registry",

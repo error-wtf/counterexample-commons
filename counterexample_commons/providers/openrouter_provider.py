@@ -6,6 +6,7 @@ import os
 
 from .base import GenerationRequest, GenerationResponse
 from .errors import ProviderNotConfiguredError
+from .http_json import openai_like_chat_text, post_json
 
 
 class OpenRouterProvider:
@@ -31,6 +32,33 @@ class OpenRouterProvider:
             raise ProviderNotConfiguredError(
                 f"{self.api_key_env_var} not set"
             )
-        raise NotImplementedError(
-            "Live OpenRouter calls require explicit user action"
+        data = post_json(
+            "https://openrouter.ai/api/v1/chat/completions",
+            {
+                "Authorization": (
+                    "Bearer " + os.environ[self.api_key_env_var]
+                ),
+                "HTTP-Referer": "https://github.com/error-wtf/"
+                "counterexample-commons",
+                "X-Title": "Counterexample Commons",
+            },
+            {
+                "model": request.model,
+                "messages": [
+                    {"role": "user", "content": request.prompt},
+                ],
+                "temperature": request.temperature,
+                "max_tokens": request.max_tokens,
+            },
+        )
+        return GenerationResponse(
+            provider_name=self.name,
+            model=request.model,
+            raw_text=openai_like_chat_text(data),
+            finish_reason=str(
+                data.get("choices", [{}])[0].get(
+                    "finish_reason", "unknown"
+                )
+            ),
+            usage=data.get("usage", {}),
         )
