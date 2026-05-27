@@ -25,6 +25,7 @@ dependencies = [
     "numpy>=1.26",
     "matplotlib>=3.9",
     "gradio>=5.0",
+    "python-dotenv>=1.0",
 ]
 
 [project.optional-dependencies]
