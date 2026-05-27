@@ -1,4 +1,4 @@
-﻿"""Finite rational mesh baseline for exact unit-distance experiments.
+"""Finite rational mesh baseline for exact unit-distance experiments.
 
 This module provides exact finite rational-grid point sets and edge counting.
 It is NOT an implementation of Sawin's n^1.014 construction.

@@ -1,185 +1,133 @@
 # Counterexample Commons
 
-## An Anti-Capitalist AI-Assisted Mathematics Research Lab
+**An Anti-Capitalist AI-Assisted Mathematics Research Lab**
+Exact finite validation for planar unit-distance configurations.
 
-[![License: ACSL v1.4](https://img.shields.io/badge/License-ACSL%20v1.4-red.svg)](LICENSE)
-[![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
-[![Research Status](https://img.shields.io/badge/Status-Experimental-orange.svg)]()
+Counterexample Commons is inspired by OpenAI's 2026 unit-distance
+breakthrough, but it does not locally reproduce the OpenAI/Sawin asymptotic
+construction. The current product is a local Gradio laboratory for:
 
-**Counterexample Commons** is a source-available research laboratory for exact
-mathematical validation and controlled AI-assisted exploration.
+- exact finite baselines;
+- rational point-set exploration;
+- visualization of exactly validated unit-distance edges;
+- finite AI-generated candidate hypotheses;
+- read-only theorem provenance;
+- finite validation reports.
 
-Its first case study examines the 2026 AI-generated counterexample to Paul
-Erdős' planar unit-distance conjecture: a result showing that, for infinitely
-many values of n, there exist planar point configurations with at least
-n^{1+δ} unit-distance pairs for some fixed δ>0. Will Sawin obtains the
-explicit exponent n^{1.014}.
+This project is source-available under the Anti-Capitalist Software License
+v1.4. It is not OSI-defined open source.
 
-This repository does not treat AI output as proof. It separates
-source-documented results from locally reproduced exact calculations,
-exploratory model-generated candidates and rejected or failed experiments.
+## Scientific Boundary
 
-Released under the **Anti-Capitalist Software License (v 1.4)**.
-Copyright © 2026 Lino Casu.
+Let `u(n)` be the maximum number of unit-distance pairs determined by `n`
+points in the plane.
 
----
+The repository keeps these categories separate:
 
-## 1. Political and Scientific Mission
+| Result | Source | Local status |
+|--------|--------|--------------|
+| OpenAI fixed-delta disproof: exists `delta > 0` | official proof PDF | `SOURCE_DOCUMENTED`, not locally reproduced |
+| Original OpenAI proof explicit delta | official announcement/proof | `NOT_PROVIDED_BY_ORIGINAL_PROOF` |
+| Companion human-digested proof | official companion remarks PDF | `SOURCE_DOCUMENTED`, not locally reproduced |
+| Companion tiny exponent around `1 + 6.24e-38` | official companion remarks PDF | `SOURCE_DOCUMENTED`, not Sawin `1.014` |
+| Sawin `delta = 0.014`, exponent `1.014` | OpenAI announcement of forthcoming refinement | `SOURCE_DOCUMENTED / PRIMARY_PROOF_PENDING` |
+| Finite rational mesh baseline | local exact checker | `LOCALLY_REPRODUCED_EXACT`, finite-only |
 
-Mathematics should not become privately enclosed research infrastructure for
-corporate extraction or military power. This project supports a
-commons-oriented, anti-capitalist approach to technical knowledge.
+The finite rational mesh baseline is useful local mathematics. It is not
+Sawin's construction, not evidence for exponent `1.014`, and not a local
+reproduction of the OpenAI asymptotic theorem.
 
-## 2. First Case Study: Erdős' Unit-Distance Problem
+## Official Sources
 
-Let u(n) = max unit-distance pairs among n planar points.
+- [OpenAI announcement, 2026-05-20](https://openai.com/index/model-disproves-discrete-geometry-conjecture/)
+- [Planar Point Sets with Many Unit Distances](https://cdn.openai.com/pdf/74c24085-19b0-4534-9c90-465b8e29ad73/unit-distance-proof.pdf)
+- [Remarks on the Disproof of the Unit Distance Conjecture](https://cdn.openai.com/pdf/74c24085-19b0-4534-9c90-465b8e29ad73/unit-distance-remarks.pdf)
 
-- **Line:** n−1 edges. **Grid k×k:** 2k(k−1) edges.
-- **Historical:** n^{1+C/log log n} constructions.
-- **2026:** AI construction achieves n^{1+δ} (fixed δ>0); Sawin: n^{1.014}.
-- **Open:** exact u(n) between n^{1.014} and O(n^{4/3}).
+The OpenAI proof mechanism is not an ordinary two-dimensional rational mesh.
+At a high level it uses totally real number fields `L`, associated CM fields
+`K = L(i)`, unramified tower/Golod-Shafarevich machinery, rational primes
+splitting completely, norm-one elements, high-dimensional Minkowski lattices,
+product-of-discs window selection, and projection to one complex coordinate.
 
-### Visuals
+## Reproduction Levels
 
-![Line](docs/images/line.png)
-<br>*Line: 5 points → 4 unit edges*
+| Level | Scope | Current status |
+|-------|-------|----------------|
+| L0 | finite exact baselines | implemented |
+| L1 | finite AI candidates | implemented |
+| L2 | official source / theorem map | implemented |
+| L3 | algebraic toy models | not implemented |
+| L4 | number-field construction prototypes | not implemented |
+| L5 | lemma-by-lemma reconstruction | not implemented |
+| L6 | asymptotic result reproduction | not implemented |
 
-![Grid](docs/images/grid.png)
-<br>*Grid: 3×3 → 12 unit edges*
+No L3-L6 result may be claimed from grid, mesh, plot, or finite AI-candidate
+success.
 
-![Custom](docs/images/custom.png)
-<br>*Unit Square: 4 points → 4 unit edges*
+## Local No-Key App
 
-![Rational mesh baseline](docs/images/sawin_lattice.png)
-<br>*Finite rational mesh baseline (not Sawin's construction)*
-
-## 3. What This Repository Reproduces
-
-| Component | Status |
-|-----------|--------|
-| Line edge count | LOCALLY_REPRODUCED_EXACT |
-| Grid edge count | LOCALLY_REPRODUCED_EXACT |
-| Custom finite validation | LOCALLY_REPRODUCED_EXACT |
-| OpenAI fixed-δ theorem | SOURCE_DOCUMENTED |
-| Finite rational mesh baseline | LOCALLY_REPRODUCED_EXACT |
-| Sawin n^{1.014} | SOURCE_DOCUMENTED — not yet locally reproduced |
-| AI-generated candidates | AI_GENERATED_HYPOTHESIS |
-
-## 4. What This Repository Does NOT Claim
-
-- Does not reproduce OpenAI's internal model execution
-- A finite configuration does not prove an asymptotic theorem
-- Sawin's explicit exponent n^{1.014} is source-documented only; not yet locally reproduced
-- The rational-mesh code is an exact finite baseline, not Sawin's algebraic-number-theoretic construction
-- Does not provide free API-funded research to public visitors
-
-## 5. Claim Status System
-
-[Full definitions](references/CLAIM_TO_SOURCE_MATRIX.md)
-
-`SOURCE_DOCUMENTED` · `LOCALLY_REPRODUCED_EXACT` · `LOCALLY_REPRODUCED_NUMERICAL`
-`AI_GENERATED_HYPOTHESIS` · `FORMALLY_VERIFIED` · `REJECTED_OR_FAILED` · `INCONCLUSIVE`
-
-## 6. Main User Interface (Gradio)
-
-Overview · Exact Baselines · Configuration Explorer · AI Candidate Lab ·
-Provider Comparison · Claim Registry · Reports & Export · Settings
-
-![AI Pipeline](docs/images/ai_pipeline.png)
-<br>*AI Experiment Pipeline: From pre-registration to sanitized export*
-
-## 7. Quick Start: Localhost
-
-```bash
-pip install -r requirements.txt
-python scripts/run_gradio_local.py --mode local-private
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.\.venv\Scripts\python.exe scripts\run_gradio_local.py --mode local-private --no-browser --port 7861
 ```
 
-## 7a. Six Execution Modes
+Without `.env`, the app remains useful:
 
-| Mode | Key | AI Labs | Share |
-|------|-----|:---:|:---:|
-| `local-private` | env file | yes | no |
-| `local-share` | none | no | yes |
-| `public-demo` | none | no | no |
-| `colab-private` | Colab Secrets | yes | no |
-| `colab-public-demo` | none | no | yes |
-| `hosted-public-demo` | none | no | no |
+- Overview and Sources & Theorem Map;
+- Exact Baselines;
+- Configuration Explorer;
+- Visualisierung;
+- read-only Claim Registry;
+- Reports & Export;
+- AI/provider tabs visible as `NOT_CONFIGURED`.
 
-## 7b. AI Experiment Pipeline
+No live provider request can be sent in a no-key state.
 
-1. **Pre-register** claim and falsifier before generation
-2. **Generate** from any provider (manual trigger only)
-3. **Extract** candidate coordinates from raw output
-4. **Validate** with exact SymPy rational arithmetic
-5. **Record** all artifacts (including failed runs)
-6. **Export** sanitized reports
+## Private Local AI Testing
 
-### Grid Scaling Analysis
+```powershell
+Copy-Item .env.example .env
+notepad .env
+```
 
-![Grid Scaling](docs/images/grid_scaling.png)
-<br>*Grid k×k scaling: Points vs edges → ratio approaches 2*
+Only `.env.example` is tracked. `.env` is ignored. The app reports provider
+status only as `CONFIGURED` or `NOT_CONFIGURED`; it must never display keys,
+fragments, token lengths, authorization headers, or `.env` contents.
 
-## 7c. Google Colab Research Lab — Rebuild in Progress
+Some provider adapters may still report `LIVE_ADAPTER_NOT_IMPLEMENTED`. That
+is intentional honesty, not mock evidence.
 
-The previously published multi-notebook Colab layer has been **withdrawn** as a
-validated public workflow.
+## AI Candidate Lab Scope
 
-Local execution inside an existing repository checkout was incorrectly treated
-as evidence of fresh Google Colab functionality. It is not.
+Current mode:
 
-The project is now rebuilding the Colab experience as **one complete,
-end-to-end research lab notebook**.
+```text
+FINITE_CANDIDATE_MODE
+```
 
-Current status:
+The AI Lab can parse/generate small finite rational point candidates and check
+them with the exact validator. It does not attempt the algebraic-number-
+theoretic construction used in the OpenAI proof, does not reproduce Sawin's
+announced `delta = 0.014` refinement, and does not establish asymptotic bounds.
 
-- Previous ten-notebook Colab layer: **deprecated / not validated**
-- New complete Colab lab: runtime test candidate under development
-- Fresh Google Colab runtime execution: **not yet verified**
-- Live provider/API workflow: not publicly released
-- Sawin n^{1.014}: SOURCE\_DOCUMENTED only, not locally reproduced
+Future proof-oriented AI experiments must be separate from finite candidate
+validation.
 
-The deprecated prototype notebooks remain in the repository under
-`notebooks/` for reference but are not advertised as public workflows.
+## Reports
 
-No Open-in-Colab links are published here until the new complete notebook
-passes fresh-runtime verification.
+Reports distinguish:
 
-## 8. Supported AI Providers (7)
+- source-documented results;
+- locally executed finite checks;
+- non-implications.
 
-| Provider | Env Var | Local Private | Colab Private | Public Demo |
-|----------|---------|:---:|:---:|:---:|
-| OpenAI | `OPENAI_API_KEY` | yes | yes | no |
-| OpenRouter | `OPENROUTER_API_KEY` | yes | yes | no |
-| Ollama Cloud | `OLLAMA_API_KEY` | yes | yes | no |
-| Ollama Local | *(none)* | yes | no | no |
-| Mistral | `MISTRAL_API_KEY` | yes | yes | no |
-| Google Gemini | `GEMINI_API_KEY` | yes | yes | no |
-| Anthropic Claude | `ANTHROPIC_API_KEY` | yes | yes | no |
+A finite validated configuration does not locally reproduce the asymptotic
+OpenAI theorem or Sawin's announced refinement.
 
-## 9. Sources
+## Colab Status
 
-| Source | Role |
-|--------|------|
-| [OpenAI announcement (2026-05-20)](https://openai.com/index/model-disproves-discrete-geometry-conjecture/) | Claim framing |
-| [Alon et al., arXiv:2605.20695](https://arxiv.org/abs/2605.20695) | Companion analysis |
-| [Sawin, arXiv:2605.20579](https://arxiv.org/abs/2605.20579) | Explicit n^{1.014} |
-
-## 10. License
-
-All original material: **Anti-Capitalist Software License (v 1.4)**.
-Copyright © 2026 Lino Casu.
-
-This is source-available anti-capitalist research software, not OSI-defined
-open-source software. See [LICENSE](LICENSE), [LICENSE_POLICY.md](LICENSE_POLICY.md),
-[THIRD_PARTY_SOURCES_AND_LICENSES.md](THIRD_PARTY_SOURCES_AND_LICENSES.md).
-
-## 11. Contributions
-
-Welcome from individuals, educational contexts, non-profits and cooperatives
-consistent with ACSL v1.4. No military, policing, surveillance or exploitative
-commercial application work.
-
-## 12. Author
-
-**Lino Casu** — independent anti-capitalist mathematical research.
+The existing Complete-Lab Colab notebook is intentionally unchanged during this
+local app recovery. It hardcodes `REPO_BRANCH = "rebuild/colab-complete-lab"`
+and cannot test this recovery branch directly. Colab deployment is deferred
+until after local no-key and private `.env` testing.

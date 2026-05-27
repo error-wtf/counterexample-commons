@@ -27,7 +27,7 @@ def test_app_has_expected_tabs(demo_app):
         "Provider Comparison",
         "Claim Registry",
         "Reports & Export",
-        "Settings",
+        "Settings / Configuration",
     ]
     for tab in expected:
         assert tab in tab_labels, f"Missing tab: {tab}"
@@ -60,9 +60,10 @@ def test_app_fns_registered(demo_app):
     ]
     named = [n for n in named if n]
     if named:
-        assert "validate_line_configuration" in named
-        assert "validate_grid_configuration" in named
-        assert "validate_custom_configuration" in named
+        assert "validate_all_baselines" in named
+        assert "validate_explorer_configuration" in named
+        assert "visualize_exact_configuration" in named
+        assert "build_finite_report" in named
 
 
 def test_line_validation_fn_directly():

@@ -25,6 +25,9 @@ class Claim:
     locally_validated: bool
     limitations: str
     last_reviewed: str
+    provenance: str = ""
+    primary_proof_present_in_repository: bool = False
+    primary_proof_linked_in_current_official_materials: bool = True
 
 
 INITIAL_CLAIMS: list[Claim] = [
@@ -35,25 +38,61 @@ INITIAL_CLAIMS: list[Claim] = [
             "for infinitely many n"
         ),
         status=ClaimStatus.SOURCE_DOCUMENTED,
-        primary_source="OpenAI article; Alon et al.",
+        primary_source=(
+            "OpenAI official proof PDF: Planar Point Sets with Many "
+            "Unit Distances"
+        ),
         locally_validated=False,
-        limitations="Full proof not locally reproduced",
+        limitations=(
+            "Source-documented theorem that some fixed delta>0 exists. "
+            "The original proof does not provide the explicit value 0.014 "
+            "and is not locally reproduced in this repository."
+        ),
         last_reviewed="2026-05-23",
+        provenance="Official proof PDF; no local reproduction.",
     ),
     Claim(
         claim_id="UD-SAWIN-2026-001",
-        statement="Exponent 1.014 achieved explicitly",
+        statement=(
+            "Sawin announced refinement: delta=0.014, exponent 1.014"
+        ),
         status=ClaimStatus.SOURCE_DOCUMENTED,
-        primary_source="Sawin 2026 arXiv:2605.20579",
+        primary_source=(
+            "OpenAI announcement of forthcoming Will Sawin refinement"
+        ),
         locally_validated=False,
         limitations=(
-            "Not yet locally reproduced. Repository contains only exact "
-            "finite rational-grid baselines, not Sawin's algebraic-"
-            "number-theoretic construction. "
-            "See case_studies/erdos_unit_distance_2026/"
-            "SAWIN_REPRODUCTION_ROADMAP.md for planned next steps."
+            "Not locally reproduced. The current official proof PDF and "
+            "companion remarks PDF do not provide the primary proof of "
+            "delta=0.014. Repository finite baselines are not Sawin's "
+            "algebraic-number-theoretic construction."
         ),
         last_reviewed="2026-05-25",
+        provenance=(
+            "OFFICIAL_ANNOUNCEMENT_OF_FORTHCOMING_REFINEMENT; "
+            "PRIMARY_PROOF_PENDING"
+        ),
+        primary_proof_present_in_repository=False,
+        primary_proof_linked_in_current_official_materials=False,
+    ),
+    Claim(
+        claim_id="UD-COMPANION-2026-001",
+        statement=(
+            "Companion remarks provide a human-digested proof and an "
+            "explicit tiny exponent around 1 + 6.24e-38"
+        ),
+        status=ClaimStatus.SOURCE_DOCUMENTED,
+        primary_source=(
+            "Official companion remarks PDF: Remarks on the Disproof of "
+            "the Unit Distance Conjecture"
+        ),
+        locally_validated=False,
+        limitations=(
+            "Source documented only. This companion exponent is not Sawin "
+            "1.014 and is not locally reproduced here."
+        ),
+        last_reviewed="2026-05-27",
+        provenance="Official companion remarks PDF.",
     ),
     Claim(
         claim_id="UD-BASE-RATIONAL-MESH-001",
@@ -71,6 +110,7 @@ INITIAL_CLAIMS: list[Claim] = [
             "rational_mesh_baseline.py"
         ),
         last_reviewed="2026-05-25",
+        provenance="Repository exact finite computation.",
     ),
     Claim(
         claim_id="UD-OPEN-001",
@@ -80,6 +120,7 @@ INITIAL_CLAIMS: list[Claim] = [
         locally_validated=False,
         limitations="Gap between n^1.014 and O(n^{4/3})",
         last_reviewed="2026-05-23",
+        provenance="Source-documented open problem framing.",
     ),
     Claim(
         claim_id="UD-BASE-001",
@@ -89,6 +130,7 @@ INITIAL_CLAIMS: list[Claim] = [
         locally_validated=True,
         limitations="Finite n only",
         last_reviewed="2026-05-23",
+        provenance="Repository exact finite computation.",
     ),
     Claim(
         claim_id="UD-BASE-002",
@@ -98,5 +140,6 @@ INITIAL_CLAIMS: list[Claim] = [
         locally_validated=True,
         limitations="Finite k only",
         last_reviewed="2026-05-23",
+        provenance="Repository exact finite computation.",
     ),
 ]

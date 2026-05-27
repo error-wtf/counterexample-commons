@@ -1,10 +1,10 @@
-﻿"""Sawin n^1.014 construction -- NOT YET IMPLEMENTED.
+"""Sawin n^1.014 announced refinement -- NOT YET IMPLEMENTED.
 
 Claim: UD-SAWIN-2026-001 (SOURCE_DOCUMENTED only)
 
-Will Sawin (arXiv:2605.20579) gives an explicit construction achieving
-u(n) >= n^1.014 for infinitely many n, using algebraic-number-theoretic
-methods over Q(sqrt(d)) for specially chosen d.
+The OpenAI announcement reports a forthcoming Will Sawin refinement with
+delta=0.014, equivalently exponent 1.014. The current official proof and
+companion remarks PDFs do not provide the primary proof of that value.
 
 This module is an intentional placeholder. The construction has NOT been
 reproduced in this repository. Calling any function below raises
@@ -15,10 +15,11 @@ See rational_mesh_baseline.py for the finite exact baseline that IS
 implemented.
 
 DO NOT promote this module to a working implementation without:
-  1. Implementing the actual algebraic construction from the paper
-  2. Adding passing tests in tests/test_sawin.py
-  3. Upgrading UD-SAWIN-2026-001 status in claims.py
-  4. Updating CLAIM_TO_SOURCE_MATRIX.md and README.md atomically
+  1. Locating and reviewing the primary proof of the announced refinement
+  2. Implementing the actual algebraic-number-theoretic construction
+  3. Adding passing tests in tests/test_sawin.py
+  4. Upgrading UD-SAWIN-2026-001 status in claims.py
+  5. Updating CLAIM_TO_SOURCE_MATRIX.md and README.md atomically
 """
 
 
@@ -46,10 +47,10 @@ def verify(m: int):
 
 
 def sawin_exponent():
-    """Return Sawin's documented exponent from the primary source.
+    """Return Sawin's announcement-documented exponent.
 
-    This is SOURCE_DOCUMENTED (arXiv:2605.20579). It has NOT been
-    locally reproduced. Do not use this value as evidence of local
-    reproduction.
+    This is SOURCE_DOCUMENTED as an OpenAI announcement of a forthcoming
+    refinement. It has NOT been locally reproduced, and the current official
+    proof/companion PDFs do not provide the primary proof of this value.
     """
     return 1.014

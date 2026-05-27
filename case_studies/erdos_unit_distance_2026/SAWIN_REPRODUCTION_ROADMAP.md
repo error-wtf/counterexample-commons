@@ -1,66 +1,55 @@
-﻿# Sawin n^1.014 Reproduction Roadmap
+# Asymptotic Reproduction Roadmap
 
-**Claim:** UD-SAWIN-2026-001
-**Current status:** SOURCE_DOCUMENTED (arXiv:2605.20579)
-**Target status:** LOCALLY_REPRODUCED_EXACT (requires all stages below)
+**Current recovery scope:** L0, L1 and L2 only.
 
----
+The repository does not locally reproduce the OpenAI proof, the companion
+proof, or Sawin's announced `delta = 0.014` refinement.
 
-## Source Summary
+## Source-Distinct Claims
 
-Will Sawin (2026) constructs point sets in Q(sqrt(d))^2 for specially
-chosen square-free d, achieving u(n) >= n^1.014 for infinitely many n.
-The construction uses:
+| Result | Current repository status |
+|--------|---------------------------|
+| OpenAI proof: exists fixed `delta > 0` | `SOURCE_DOCUMENTED`, not locally reproduced |
+| Original proof explicit `delta = 0.014` | `NOT_PROVIDED_BY_ORIGINAL_PROOF` |
+| Companion tiny exponent around `1 + 6.24e-38` | `SOURCE_DOCUMENTED`, not locally reproduced |
+| Sawin `delta = 0.014` | OpenAI announcement of forthcoming refinement; primary proof pending |
+| Finite rational mesh | locally exact finite baseline; not Sawin |
 
-1. A quadratic field Q(sqrt(d)) with d chosen so the unit circle over
-   Q(sqrt(d)) has many rational points.
-2. A Gaussian-integer-like lattice in Q(sqrt(d))^2.
-3. A counting argument showing the ratio of unit edges to points
-   exceeds n^0.014.
+## Real Proof Architecture
 
-Primary source: arXiv:2605.20579 (Will Sawin, 2026)
+The source-documented asymptotic proof is not a finite rational mesh. At a
+high level it uses:
 
----
+1. totally real number fields `L`;
+2. CM fields `K = L(i)`;
+3. unramified tower / Golod-Shafarevich machinery;
+4. rational primes splitting completely;
+5. many norm-one elements under complex embeddings;
+6. high-dimensional Minkowski lattices;
+7. product-of-discs window selection;
+8. projection to one complex coordinate.
 
 ## Reproduction Levels
 
-| Level | Description | Blocker |
-|-------|-------------|---------|
-| L0 | Read and understand the paper | None — do this first |
-| L1 | Identify a concrete d, verify unit circle has many Q(sqrt(d)) points | Requires algebraic geometry in SymPy or SageMath |
-| L2 | Generate a small finite instance of the Sawin lattice exactly | Requires L1 complete |
-| L3 | Count unit edges exactly on that instance | Requires L2 + SymPy rational arithmetic |
-| L4 | Show edge ratio > n^0.014 for the instance | Requires L3 |
-| L5 | Reproduce for multiple n, fit empirical exponent | Requires L4 |
-| L6 | Full asymptotic argument verified | Out of scope for this project |
+| Level | Description | Current status |
+|-------|-------------|----------------|
+| L0 | finite exact line/grid/rational/mesh baselines | implemented |
+| L1 | finite AI-generated rational candidates, exactly validated | implemented |
+| L2 | official source and theorem provenance map | implemented |
+| L3 | algebraic toy models: Gaussian integers, norm-one examples, small embeddings | not implemented |
+| L4 | CM-field, splitting-prime and Minkowski-embedding prototypes | not implemented |
+| L5 | lemma-by-lemma reconstruction of source proof machinery | not implemented |
+| L6 | independently verified asymptotic result reproduction | not implemented |
 
----
+## Upgrade Rule
 
-## Immediate Next Steps
+Do not upgrade any asymptotic claim based on:
 
-1. Read Section 2 of arXiv:2605.20579; identify explicit d values used.
-2. Install SageMath or use SymPy NumberField to enumerate unit-circle
-   points over Q(sqrt(d)).
-3. Implement generate_sawin_field_points(d, bound) in sawin_construction.py.
-4. Verify at least one small instance: n points, e unit edges, e/n > 1.
-5. Write tests in tests/test_sawin.py that remove NotImplementedError
-   guards only for implemented levels.
-6. Update UD-SAWIN-2026-001 status atomically per CLAIM_TO_SOURCE_MATRIX.md
-   upgrade requirements.
+- square grids;
+- finite rational mesh plots;
+- AI-produced small rational point sets;
+- visual density;
+- finite exact validation alone.
 
----
-
-## What Is Already Done
-
-- Exact finite rational-mesh baseline (UD-BASE-RATIONAL-MESH-001):
-  LOCALLY_REPRODUCED_EXACT. See rational_mesh_baseline.py.
-- This is NOT a reproduction of Sawin. It is an exploratory baseline.
-
----
-
-## What Must NOT Be Done
-
-- Do not upgrade UD-SAWIN-2026-001 based on the rational mesh baseline.
-- Do not claim numerical evidence without running the actual construction.
-- Do not merge changes that set locally_validated=True without a code
-  implementation that passes tests.
+Only a complete independently verified L6 programme may support a local
+asymptotic reproduction claim.

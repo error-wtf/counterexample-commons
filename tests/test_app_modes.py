@@ -109,9 +109,13 @@ def test_private_modes_refuse_public_share():
             ],
             capture_output=True,
             text=True,
-            cwd=str(__import__("pathlib").Path(__file__).resolve().parent.parent),
+            cwd=str(
+                __import__("pathlib").Path(__file__).resolve().parent.parent
+            ),
         )
         assert result.returncode != 0, (
             f"Mode '{mode}' with --confirm-public-share should exit non-zero"
         )
-        assert "Refusing public share" in result.stderr or "Refusing public share" in result.stdout
+        refused_in_stderr = "Refusing public share" in result.stderr
+        refused_in_stdout = "Refusing public share" in result.stdout
+        assert refused_in_stderr or refused_in_stdout

@@ -1,4 +1,4 @@
-﻿"""Tests for Sawin placeholder and rational mesh baseline."""
+"""Tests for Sawin placeholder and rational mesh baseline."""
 
 import pytest
 

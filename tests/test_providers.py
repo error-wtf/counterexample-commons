@@ -10,7 +10,6 @@ from counterexample_commons.providers import (
     ModelProvider,
     ProviderNotConfiguredError,
 )
-from counterexample_commons.providers.registry import ProviderRegistry
 
 
 EXPECTED_PROVIDERS = [

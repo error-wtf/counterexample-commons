@@ -41,19 +41,32 @@ def main():
         "--confirm-public-share", action="store_true",
         help="Required to enable a public share link",
     )
+    parser.add_argument(
+        "--confirm-live-ai-share", action="store_true",
+        help="Explicitly allow sharing a live-AI-enabled local session",
+    )
     args = parser.parse_args()
 
     mode = AppMode(args.mode)
-    share = args.confirm_public_share
+    share = args.confirm_public_share or args.confirm_live_ai_share
 
     _private_modes = {AppMode.LOCAL_PRIVATE, AppMode.COLAB_PRIVATE}
-    if share and mode in _private_modes:
+    if args.confirm_public_share and mode in _private_modes:
         raise SystemExit(
             f"Refusing public share: '{mode.value}' may load secrets or "
             "writable research state. Use a public-demo mode instead."
         )
+    if args.confirm_live_ai_share:
+        print(
+            "LIVE-AI SHARE WARNING: anyone with access may trigger provider "
+            "requests and consume quota or incur cost. Credentials are not "
+            "displayed or exported, but the configured account may be used."
+        )
 
-    demo = build_app(mode=mode)
+    demo = build_app(
+        mode=mode,
+        live_ai_share_enabled=args.confirm_live_ai_share,
+    )
     demo.queue().launch(
         server_name="127.0.0.1",
         server_port=args.port,
