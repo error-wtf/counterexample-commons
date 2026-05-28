@@ -18,8 +18,10 @@ from app.main import (
     build_finite_report,
     finite_candidate_prompt,
     generate_ai_candidate_with_provider,
+    generate_report_callback,
     no_key_action_result,
     no_key_provider_markdown,
+    package_a_baseline_compact_rows,
     overview_markdown,
     package_a_baseline_results,
     package_a_visualize_source,
@@ -28,6 +30,7 @@ from app.main import (
     provider_statuses,
     settings_markdown,
     source_theorem_map_markdown,
+    validate_all_exact_baselines_callback,
     validate_ai_candidate_payload,
     validate_explorer_text,
 )
@@ -175,6 +178,97 @@ def test_finite_reports_for_baseline_explorer_and_ai_are_real():
     assert "AI-generated candidate independently checked" in ai_md
 
 
+def test_shared_state_flows_from_baseline_and_explorer_to_export():
+    table, summary, technical, baseline_state = (
+        validate_all_exact_baselines_callback(5, 3, 10)
+    )
+    assert table[-1] == [
+        "Finite Rational Mesh Baseline",
+        121,
+        82,
+        "LOCALLY_REPRODUCED_EXACT",
+    ]
+    assert "Scientific scope" in summary
+    assert "not Sawin's construction" in summary
+    assert technical["latest_result"]["edge_count"] == 82
+
+    preview, md_path, json_path, details = generate_report_callback(
+        "Latest Baseline Result",
+        baseline_state,
+        None,
+        None,
+    )
+    assert not preview.startswith("ERROR:")
+    assert "Finite exact validation export only" in preview
+    assert Path(md_path).exists()
+    assert Path(json_path).exists()
+    assert details["secrets_displayed_or_exported"] == "NO"
+
+    _, _, _, explorer_state = validate_explorer_text(
+        "0, 0\n1, 0\n1, 1\n0, 1",
+    )
+    fig, plot_summary, plot_data = package_a_visualize_source(
+        "Latest Explorer Result",
+        5,
+        3,
+        10,
+        False,
+        True,
+        True,
+        explorer_state,
+        None,
+    )
+    assert fig is not None
+    assert "Explorer Configuration" in plot_summary
+    assert plot_data["source_kind"] == "explorer"
+    plt.close(fig)
+    preview, md_path, json_path, _ = generate_report_callback(
+        "Latest Explorer Result",
+        None,
+        explorer_state,
+        None,
+    )
+    assert not preview.startswith("ERROR:")
+    assert Path(md_path).exists()
+    assert Path(json_path).exists()
+
+
+def test_shared_state_flows_from_fake_ai_to_visualisation_and_export():
+    _, _, ai_state = validate_ai_candidate_payload(valid_candidate_json())
+    fig, summary, data = package_a_visualize_source(
+        "Latest AI Candidate Result",
+        5,
+        3,
+        10,
+        False,
+        True,
+        True,
+        None,
+        ai_state,
+    )
+    assert fig is not None
+    assert data["source_kind"] == "ai_candidate"
+    assert AI_VALIDATED in summary
+    plt.close(fig)
+    preview, md_path, json_path, _ = generate_report_callback(
+        "Latest AI Candidate Result",
+        None,
+        None,
+        ai_state,
+    )
+    assert not preview.startswith("ERROR:")
+    assert "AI-generated candidate independently checked" in preview
+    assert Path(md_path).exists()
+    assert Path(json_path).exists()
+
+
+def test_baseline_compact_rows_keep_scope_out_of_cramped_table():
+    results = package_a_baseline_results(5, 3, 10)
+    rows = package_a_baseline_compact_rows(results)
+    assert len(rows[-1]) == 4
+    assert "not Sawin" not in " ".join(str(cell) for cell in rows[-1])
+
+
 def test_reports_sanitize_fake_secret():
     prefix = "s" + "k" + "-"
     result = package_a_baseline_results(5, 3, 10)[0]
@@ -240,6 +334,8 @@ def test_no_key_overview_settings_and_actions_are_safe(monkeypatch):
     settings = settings_markdown(AppMode.LOCAL_PRIVATE, env)
     assert "SAFE NO-KEY SESSION" in overview
     assert "No live API request can be sent" in overview
+    assert "```text" not in overview
+    assert "Exact finite baselines, explorer, visualisation" in overview
     assert "LOCAL_ENV_FILE: NOT_FOUND" in settings
     assert "NOT_CONFIGURED" in no_key_provider_markdown(env)
     assert "RESULT: NOT_CONFIGURED" in no_key_action_result()
@@ -333,6 +429,9 @@ def test_source_map_provenance_is_correct():
     assert "OpenAI fixed delta > 0" in text
     assert "NOT_PROVIDED_BY_ORIGINAL_PROOF" in text
     assert "arXiv:2605.20579" in text
+    assert "LOCALLY_REPRODUCED_EXACT" in text
+    assert "Not Sawin" in text or "not Sawin" in text
+    assert "| Result | Source |" not in text
     assert "PRIMARY_PROOF_PENDING" not in text
 
 

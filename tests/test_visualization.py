@@ -5,6 +5,7 @@ from counterexample_commons import visualization
 from counterexample_commons.visualization import (
     plot_configuration,
     plot_from_result,
+    plot_title_for_result,
 )
 from counterexample_commons.validated_result import (
     ValidatedConfigurationResult,
@@ -45,6 +46,30 @@ class TestVisualization:
         )
         fig = plot_from_result(result)
         assert fig is not None
+        import matplotlib.pyplot as plt
+        plt.close(fig)
+
+    def test_dense_mesh_plot_title_keeps_boundary_out_of_title(self):
+        """Dense plot titles stay short; scope remains in surrounding UI."""
+        result = ValidatedConfigurationResult(
+            name="Finite Rational Mesh Baseline",
+            points=[(str(i), "0") for i in range(121)],
+            exact_edges=[(i, i + 1) for i in range(82)],
+            edge_count=82,
+            validation_status="LOCALLY_REPRODUCED_EXACT",
+            scientific_scope=(
+                "Finite rational mesh baseline - not Sawin's construction. "
+                "Finite exact validation only."
+            ),
+            source_kind="baseline",
+        )
+        title = plot_title_for_result(result)
+        assert title == (
+            "Finite Rational Mesh Baseline - 121 points, 82 exact edges"
+        )
+        fig = plot_from_result(result, show_labels=False)
+        assert fig.axes[0].get_title() == title
+        assert "not Sawin" not in fig.axes[0].get_title()
         import matplotlib.pyplot as plt
         plt.close(fig)
 

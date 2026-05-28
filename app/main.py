@@ -137,6 +137,30 @@ SOURCE_THEOREM_ROWS = [
 ]
 
 
+APP_CSS = """
+.gradio-container {
+    max-width: 1280px !important;
+}
+.cc-wrap, .cc-wrap * {
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+}
+.cc-card {
+    border: 1px solid var(--border-color-primary);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    margin: 0.6rem 0;
+    background: var(--background-fill-secondary);
+}
+.cc-status {
+    border-left: 4px solid #2f55ff;
+    padding: 0.85rem 1rem;
+    background: var(--background-fill-secondary);
+}
+"""
+
+
 def _points_to_strings(points):
     return [(str(x), str(y)) for x, y in points]
 
@@ -226,9 +250,70 @@ def package_a_baseline_table_rows(results) -> list[list[str | int]]:
     return [result.to_table_row() for result in results]
 
 
+def package_a_baseline_compact_rows(results) -> list[list[str | int]]:
+    """Return compact rows that keep long scope text out of table cells."""
+    return [
+        [
+            result.name,
+            result.point_count,
+            result.edge_count,
+            result.validation_status,
+        ]
+        for result in results
+    ]
+
+
 def package_a_result_summary(result: ValidatedConfigurationResult) -> str:
     """Return a UI summary for a validated configuration."""
     return result.to_summary_markdown()
+
+
+def baseline_scope_cards_markdown(results) -> str:
+    """Return readable scope summaries outside cramped table columns."""
+    sections = [
+        "### Scientific scope",
+        "",
+        "Each row above was checked through the exact rational validator.",
+    ]
+    for result in results:
+        sections.extend([
+            "",
+            '<div class="cc-card">',
+            f"<strong>{result.name}</strong><br>",
+            f"Points: {result.point_count}<br>",
+            f"Exactly validated unit-distance edges: {result.edge_count}<br>",
+            f"Status: <code>{result.validation_status}</code><br>",
+            f"Scientific scope: {result.scientific_scope}",
+            "</div>",
+        ])
+    return "\n".join(sections)
+
+
+def validate_all_exact_baselines_callback(
+    line_n: int,
+    grid_k: int,
+    mesh_m: int,
+) -> tuple[list[list[str | int]], str, dict, dict]:
+    """Validate all exact baselines and update shared latest-baseline state."""
+    results = package_a_baseline_results(
+        int(line_n),
+        int(grid_k),
+        int(mesh_m),
+    )
+    latest = results[-1]
+    technical = {
+        "latest_result": latest.to_state_dict(),
+        "all_results": {
+            result.name: result.to_state_dict()
+            for result in results
+        },
+    }
+    return (
+        package_a_baseline_compact_rows(results),
+        baseline_scope_cards_markdown(results),
+        technical,
+        latest.to_state_dict(),
+    )
 
 
 def package_a_visualize_source(
@@ -401,6 +486,30 @@ def provenance_markdown() -> str:
     ])
 
 
+def _compact_sequence_markdown(
+    title: str,
+    items,
+    total: int,
+    limit: int = 16,
+) -> str:
+    """Return compact preview text for report markdown."""
+    preview = list(items)[:limit]
+    suffix = (
+        f"\n\nShowing {len(preview)} of {total}. "
+        "The complete data is included in the JSON download."
+        if total > limit
+        else ""
+    )
+    return "\n".join([
+        f"## {title}",
+        "",
+        "```json",
+        json.dumps(preview, indent=2),
+        "```",
+        suffix,
+    ])
+
+
 def build_finite_report(
     result: ValidatedConfigurationResult,
 ) -> tuple[str, str, dict]:
@@ -452,15 +561,17 @@ def build_finite_report(
         AI_EXPORT_BOUNDARY if result.source_kind == "ai_candidate" else "",
         provenance_markdown(),
         "",
-        "## Points",
-        "```json",
-        json.dumps(list(result.points), indent=2),
-        "```",
+        _compact_sequence_markdown(
+            "Point Preview",
+            result.points,
+            result.point_count,
+        ),
         "",
-        "## Exact Edges",
-        "```json",
-        json.dumps(list(result.exact_edges), indent=2),
-        "```",
+        _compact_sequence_markdown(
+            "Exact Edge Preview",
+            result.exact_edges,
+            result.edge_count,
+        ),
     ])
     json_text = json.dumps(payload, indent=2)
     sanitized_md = sanitize_for_export(markdown)
@@ -559,26 +670,26 @@ def overview_markdown(
 ) -> str:
     """Build the Overview text for current env status."""
     if any_live_provider_configured(env_status):
-        session = "\n".join([
-            "LIVE AI CONFIGURED",
+        session_lines = [
+            "**LIVE AI CONFIGURED**",
             "",
-            "Real provider requests are available in this running session.",
-            "Requests may consume quota or incur cost.",
-            "Credentials are never displayed or exported.",
-            "AI-generated candidates remain hypotheses until independently "
+            "- Real provider requests are available in this running session.",
+            "- Requests may consume quota or incur cost.",
+            "- Credentials are never displayed or exported.",
+            "- AI-generated candidates remain hypotheses until independently "
             "checked by the exact finite validator.",
-        ])
+        ]
     else:
-        session = "\n".join([
-            "SAFE NO-KEY SESSION",
+        session_lines = [
+            "**SAFE NO-KEY SESSION**",
             "",
-            "No live provider is configured.",
-            "Exact finite baselines, explorer, visualisation, read-only "
+            "- No live provider is configured.",
+            "- Exact finite baselines, explorer, visualisation, read-only "
             "claims and finite exports are available.",
-            "AI actions are visible but inactive until local provider "
+            "- AI actions are visible but inactive until local provider "
             "credentials are configured.",
-            "No live API request can be sent in the current state.",
-        ])
+            "- No live API request can be sent in the current state.",
+        ]
     warning = (
         "\n\n## Live Share Warning\n\n" + LIVE_AI_SHARE_WARNING
         if live_ai_share else ""
@@ -590,9 +701,9 @@ def overview_markdown(
         "First case study: exact finite validation around the 2026 "
         "unit-distance breakthrough.",
         "",
-        "```text",
-        session,
-        "```",
+        '<div class="cc-status">',
+        *session_lines,
+        "</div>",
         "",
         "Sawin n^1.014: SOURCE_DOCUMENTED - primary source "
         "arXiv:2605.20579; not locally reproduced.",
@@ -1018,28 +1129,56 @@ def provider_comparison_run(
 
 def source_theorem_map_markdown() -> str:
     """Return user-facing source map text."""
-    lines = [
+    return "\n".join([
         "## Sources & Theorem Map",
         "",
-        "| Result | Source | Status | Locally executable? | Boundary |",
-        "|---|---|---|---|---|",
-    ]
-    for row in SOURCE_THEOREM_ROWS:
-        lines.append("| " + " | ".join(row) + " |")
-    lines.extend([
+        '<div class="cc-card">',
+        "<strong>OpenAI fixed delta > 0</strong><br>",
+        "Status: <code>SOURCE_DOCUMENTED</code><br>",
+        "Source: OpenAI announcement and proof PDF<br>",
+        "Locally executable: No<br>",
+        "Boundary: not locally reproduced.",
+        "</div>",
+        "",
+        '<div class="cc-card">',
+        "<strong>Original OpenAI proof explicit delta = 0.014</strong><br>",
+        "Status: <code>NOT_PROVIDED_BY_ORIGINAL_PROOF</code><br>",
+        "Source: original proof source boundary<br>",
+        "Locally executable: No<br>",
+        "Boundary: the original proof establishes fixed delta > 0, "
+        "not 0.014.",
+        "</div>",
+        "",
+        '<div class="cc-card">',
+        "<strong>Sawin explicit n^1.014</strong><br>",
+        "Status: <code>SOURCE_DOCUMENTED</code><br>",
+        "Primary source: Will Sawin, arXiv:2605.20579<br>",
+        "Locally executable: No<br>",
+        "Boundary: primary-source documented; not locally reproduced.",
+        "</div>",
+        "",
+        '<div class="cc-card">',
+        "<strong>Finite Rational Mesh Baseline</strong><br>",
+        "Status: <code>LOCALLY_REPRODUCED_EXACT</code><br>",
+        "Source: repository exact validator<br>",
+        "Locally executable: Yes<br>",
+        "Boundary: not Sawin's construction. Finite exact validation only.",
+        "</div>",
         "",
         "The locally executable finite baselines in this repository do not "
         "reproduce the algebraic-number-theoretic asymptotic construction "
         "from the OpenAI proof or Sawin's explicit result.",
     ])
-    return "\n".join(lines)
 
 
 def _overview_tab(
     env_status: EnvironmentStatus,
     live_ai_share: bool,
 ):
-    gr.Markdown(overview_markdown(env_status, live_ai_share))
+    gr.Markdown(
+        overview_markdown(env_status, live_ai_share),
+        elem_classes=["cc-wrap"],
+    )
 
 
 def _baselines_tab(baseline_state):
@@ -1065,37 +1204,17 @@ def _baselines_tab(baseline_state):
             "Points",
             "Exact unit-distance edges",
             "Status",
-            "Scientific scope",
         ],
         interactive=False,
         label="Exact finite baseline results",
+        wrap=True,
     )
-    summary = gr.Markdown()
-    technical = gr.JSON(label="Validated baseline state")
-
-    def _run(line_n, grid_k, mesh_m):
-        results = package_a_baseline_results(
-            int(line_n),
-            int(grid_k),
-            int(mesh_m),
-        )
-        latest = results[-1]
-        state = {
-            result.name: result.to_state_dict()
-            for result in results
-        }
-        summary_text = "\n\n---\n\n".join(
-            result.to_summary_markdown() for result in results
-        )
-        return (
-            package_a_baseline_table_rows(results),
-            summary_text,
-            state,
-            latest.to_state_dict(),
-        )
+    summary = gr.Markdown(elem_classes=["cc-wrap"])
+    with gr.Accordion("Technical JSON details (optional)", open=False):
+        technical = gr.JSON(label="Validated baseline state")
 
     btn.click(
-        fn=_run,
+        fn=validate_all_exact_baselines_callback,
         inputs=[n_line, k_grid, m_mesh],
         outputs=[table, summary, technical, baseline_state],
         api_name="validate_all_exact_baselines",
@@ -1135,13 +1254,15 @@ def _explorer_tab(explorer_state):
         lines=10,
     )
     btn_validate = gr.Button("Validate Explorer Configuration")
-    summary = gr.Markdown()
+    summary = gr.Markdown(elem_classes=["cc-wrap"])
     edges = gr.Dataframe(
         headers=["i", "j"],
         interactive=False,
         label="Exact unit-distance edges",
+        wrap=True,
     )
-    details = gr.JSON(label="Validated Explorer result")
+    with gr.Accordion("Technical JSON details (optional)", open=False):
+        details = gr.JSON(label="Validated Explorer result")
 
     preset.change(
         fn=explorer_preset_text,
@@ -1184,7 +1305,7 @@ def _visualisierung_tab(explorer_state, ai_state):
             1, 12, value=10, step=1, label="Rational Mesh m"
         )
     with gr.Row():
-        labels = gr.Checkbox(value=True, label="Show point labels")
+        labels = gr.Checkbox(value=False, label="Show point labels")
         edges = gr.Checkbox(
             value=True,
             label="Show validated unit-distance edges",
@@ -1192,8 +1313,9 @@ def _visualisierung_tab(explorer_state, ai_state):
         grid = gr.Checkbox(value=True, label="Show coordinate grid")
     btn = gr.Button("Validate and Visualize")
     plot = gr.Plot(label="Visualization")
-    summary = gr.Markdown()
-    technical = gr.JSON(label="Validated visualization data")
+    summary = gr.Markdown(elem_classes=["cc-wrap"])
+    with gr.Accordion("Technical JSON details (optional)", open=False):
+        technical = gr.JSON(label="Validated visualization data")
 
     btn.click(
         fn=package_a_visualize_source,
@@ -1234,7 +1356,10 @@ def _claims_tab(editable: bool):
         ],
         interactive=editable,
     )
-    gr.Markdown(source_theorem_map_markdown())
+    gr.Markdown(
+        source_theorem_map_markdown(),
+        elem_classes=["cc-wrap"],
+    )
 
 
 def _settings_tab(
@@ -1282,7 +1407,8 @@ def _ai_candidate_lab_tab(
         "Generate Finite Candidate and Validate Exactly"
     )
     candidate_summary = gr.Markdown()
-    candidate_data = gr.JSON(label="AI candidate validation details")
+    with gr.Accordion("Technical JSON details (optional)", open=False):
+        candidate_data = gr.JSON(label="AI candidate validation details")
 
     btn_test.click(
         fn=provider_connection_test,
@@ -1359,7 +1485,8 @@ def _reports_export_tab(
     preview = gr.Markdown()
     markdown_file = gr.File(label="Markdown report")
     json_file = gr.File(label="JSON report")
-    details = gr.JSON(label="Sanitization details")
+    with gr.Accordion("Technical JSON details (optional)", open=False):
+        details = gr.JSON(label="Sanitization details")
     btn.click(
         fn=generate_report_callback,
         inputs=[source, baseline_state, explorer_state, ai_state],
@@ -1373,7 +1500,8 @@ def _reports_export_tab(
         lines=6,
     )
     btn_sanitize = gr.Button("Sanitize & Check")
-    out_sanitized = gr.JSON(label="Sanitization Result")
+    with gr.Accordion("Technical JSON details (optional)", open=False):
+        out_sanitized = gr.JSON(label="Sanitization Result")
 
     def _sanitize(text):
         sanitized = sanitize_for_export(text)
@@ -1401,6 +1529,7 @@ def build_app(
     env_status = environment_for_mode(mode)
 
     with gr.Blocks(title="Counterexample Commons") as demo:
+        gr.HTML(f"<style>{APP_CSS}</style>")
         if live_ai_share:
             gr.Markdown("## WARNING\n\n" + LIVE_AI_SHARE_WARNING)
         gr.Markdown(
@@ -1408,9 +1537,9 @@ def build_app(
             "*Exact Validation and Anti-Capitalist "
             "AI-Assisted Mathematics Research*"
         )
-        baseline_state = gr.State(None)
-        explorer_state = gr.State(None)
-        ai_state = gr.State(None)
+        baseline_state = gr.JSON(value=None, visible=False)
+        explorer_state = gr.JSON(value=None, visible=False)
+        ai_state = gr.JSON(value=None, visible=False)
 
         with gr.Tabs():
             with gr.Tab("Overview"):
