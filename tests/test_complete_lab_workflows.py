@@ -16,6 +16,7 @@ from app.main import (
     AI_VALIDATED,
     build_app,
     build_finite_report,
+    configured_provider_names,
     finite_candidate_prompt,
     generate_ai_candidate_with_provider,
     generate_report_callback,
@@ -338,6 +339,24 @@ def test_dot_env_is_gitignored():
 
 
 def test_no_key_overview_settings_and_actions_are_safe(monkeypatch):
+    class UnavailableRegistry:
+        def list_names(self):
+            return ["ollama_local", "openai"]
+
+        def get(self, name):
+            class Provider:
+                api_key_env_var = "OPENAI_API_KEY" if name == "openai" else ""
+
+                def is_available(self):
+                    return False
+
+            return Provider()
+
+    monkeypatch.setattr(
+        app_main,
+        "build_default_registry",
+        UnavailableRegistry,
+    )
     for key in [
         "OPENAI_API_KEY",
         "ANTHROPIC_API_KEY",
@@ -359,6 +378,29 @@ def test_no_key_overview_settings_and_actions_are_safe(monkeypatch):
     assert "RESULT: NOT_CONFIGURED" in no_key_action_result()
     assert provider_statuses(env)["openai"] == "NOT_CONFIGURED"
     assert build_app(AppMode.COLAB_PUBLIC_DEMO) is not None
+
+
+def test_local_ollama_status_enables_full_local_ai_ui(monkeypatch):
+    class FakeOllama:
+        api_key_env_var = ""
+
+        def is_available(self):
+            return True
+
+    class FakeRegistry:
+        def list_names(self):
+            return ["ollama_local"]
+
+        def get(self, name):
+            return FakeOllama()
+
+    monkeypatch.setattr(app_main, "build_default_registry", FakeRegistry)
+    env = no_key_status()
+    statuses = provider_statuses(env)
+    assert statuses["ollama_local"] == "CONFIGURED"
+    assert app_main.any_live_provider_configured(env) is True
+    assert configured_provider_names(env) == ["ollama_local"]
+    assert "LIVE AI CONFIGURED" in overview_markdown(env)
 
 
 def test_ai_candidate_validation_success_rejection_and_overclaims():

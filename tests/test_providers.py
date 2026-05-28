@@ -10,6 +10,9 @@ from counterexample_commons.providers import (
     ModelProvider,
     ProviderNotConfiguredError,
 )
+from counterexample_commons.providers.ollama_local_provider import (
+    OllamaLocalProvider,
+)
 
 
 EXPECTED_PROVIDERS = [
@@ -69,6 +72,32 @@ class TestProviderProtocol:
         provider = reg.get("ollama_local")
         assert provider.requires_api_key is False
         assert provider.api_key_env_var == ""
+
+    def test_ollama_local_availability_checks_tags_endpoint(self, monkeypatch):
+        called = {}
+
+        class FakeResponse:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, exc_type, exc, tb):
+                return False
+
+        def fake_urlopen(req, timeout):
+            called["url"] = req.full_url
+            called["timeout"] = timeout
+            return FakeResponse()
+
+        monkeypatch.setattr(
+            "urllib.request.urlopen",
+            fake_urlopen,
+        )
+        provider = OllamaLocalProvider("http://127.0.0.1:11434")
+        assert provider.is_available() is True
+        assert called["url"] == "http://127.0.0.1:11434/api/tags"
+        assert called["timeout"] == 2
 
 
 class TestMissingKeyBehavior:

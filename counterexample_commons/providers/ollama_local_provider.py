@@ -31,7 +31,15 @@ class OllamaLocalProvider:
         return ""
 
     def is_available(self) -> bool:
-        return False
+        req = urllib.request.Request(
+            self._base_url.rstrip("/") + "/api/tags",
+            method="GET",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=2) as response:
+                return 200 <= response.status < 300
+        except (urllib.error.URLError, TimeoutError, OSError):
+            return False
 
     def generate(self, request: GenerationRequest) -> GenerationResponse:
         payload = json.dumps({

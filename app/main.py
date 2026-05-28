@@ -664,7 +664,11 @@ def provider_statuses(
     for name in registry.list_names():
         provider = registry.get(name)
         if name == "ollama_local":
-            statuses[name] = "NOT_CONFIGURED"
+            statuses[name] = (
+                "CONFIGURED"
+                if provider and provider.is_available()
+                else "NOT_CONFIGURED"
+            )
         elif provider and provider.api_key_env_var:
             configured = env_status.providers.get(name) == "CONFIGURED"
             statuses[name] = "CONFIGURED" if configured else "NOT_CONFIGURED"
@@ -675,7 +679,23 @@ def provider_statuses(
 
 def any_live_provider_configured(env_status: EnvironmentStatus) -> bool:
     """Return whether any live provider key is configured."""
-    return env_status.any_provider_configured
+    return (
+        env_status.any_provider_configured
+        or provider_statuses(env_status).get("ollama_local") == "CONFIGURED"
+    )
+
+
+def configured_provider_names(
+    env_status: EnvironmentStatus,
+    registry=None,
+) -> list[str]:
+    """Return provider names that can be explicitly selected now."""
+    registry = registry or build_default_registry()
+    statuses = provider_statuses(env_status, registry)
+    return [
+        name for name in registry.list_names()
+        if statuses.get(name) == "CONFIGURED"
+    ]
 
 
 def overview_markdown(
@@ -1393,6 +1413,7 @@ def _ai_candidate_lab_tab(
     configured = any_live_provider_configured(env_status)
     registry = build_default_registry()
     provider_names = registry.list_names()
+    configured_names = configured_provider_names(env_status, registry)
     if not configured:
         gr.Markdown(no_key_ai_markdown())
         btn_test = gr.Button("Test Provider Connection")
@@ -1411,7 +1432,7 @@ def _ai_candidate_lab_tab(
     )
     provider = gr.Dropdown(
         choices=provider_names,
-        value=provider_names[0] if provider_names else None,
+        value=configured_names[0] if configured_names else None,
         label="Provider",
     )
     btn_test = gr.Button("Test Provider Connection")
@@ -1441,7 +1462,7 @@ def _ai_candidate_lab_tab(
 def _provider_comparison_tab(env_status: EnvironmentStatus):
     configured = any_live_provider_configured(env_status)
     registry = build_default_registry()
-    provider_names = registry.list_names()
+    provider_names = configured_provider_names(env_status, registry)
     if not configured:
         gr.Markdown(no_key_provider_markdown(env_status))
         return
