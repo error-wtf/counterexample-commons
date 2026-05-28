@@ -196,8 +196,10 @@ been locally reproduced.
 Colab cannot see an Ollama server running on your desktop `localhost`.
 By default the notebook installs/starts Ollama inside the Colab VM, pulls
 `OLLAMA_MODEL` and launches the app in `colab-private` mode. This uses Colab
-runtime compute, not an API key. Set `ENABLE_COLAB_OLLAMA = False` for a
-finite-only `colab-public-demo` run.
+runtime compute, not an API key. The notebook uses Ollama's official Linux
+archives directly instead of relying on the service install script, because
+fresh Colab runtimes do not behave like normal systemd Linux hosts. Set
+`ENABLE_COLAB_OLLAMA = False` for a finite-only `colab-public-demo` run.
 
 ## 8. Supported AI Providers (7)
 

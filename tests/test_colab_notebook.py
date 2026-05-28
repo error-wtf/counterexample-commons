@@ -77,6 +77,9 @@ def test_complete_colab_has_optional_keyless_ollama_mode():
     assert "desktop `localhost`" in text
     assert "shutil.which(\"ollama\")" in text
     assert "_ollama_server_ready" in text
+    assert "ollama-linux-{arch}.tgz" in text
+    assert "ollama-linux-{arch}.tar.zst" in text
+    assert "install.sh | sh" not in text
 
 
 def test_complete_colab_scientific_boundaries():
