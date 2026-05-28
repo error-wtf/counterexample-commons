@@ -416,7 +416,14 @@ def validate_explorer_text(
         EXPLORER_SCOPE,
         source_kind="explorer",
     )
-    edge_rows = [[i, j] for i, j in result.exact_edges]
+    edge_rows = [
+        [
+            index,
+            f"({result.points[i][0]}, {result.points[i][1]})",
+            f"({result.points[j][0]}, {result.points[j][1]})",
+        ]
+        for index, (i, j) in enumerate(result.exact_edges, start=1)
+    ]
     return (
         result.to_summary_markdown(),
         edge_rows,
@@ -494,20 +501,27 @@ def _compact_sequence_markdown(
 ) -> str:
     """Return compact preview text for report markdown."""
     preview = list(items)[:limit]
-    suffix = (
-        f"\n\nShowing {len(preview)} of {total}. "
-        "The complete data is included in the JSON download."
-        if total > limit
-        else ""
-    )
-    return "\n".join([
+    body = "\n".join([
         f"## {title}",
         "",
         "```json",
         json.dumps(preview, indent=2),
         "```",
-        suffix,
     ])
+    if total > limit:
+        body += (
+            f"\n\nShowing {len(preview)} of {total}. "
+            "The complete data is included in the JSON download."
+        )
+        return "\n".join([
+            "<details>",
+            f"<summary>{title} ({len(preview)} of {total})</summary>",
+            "",
+            body,
+            "",
+            "</details>",
+        ])
+    return body
 
 
 def build_finite_report(
@@ -1202,7 +1216,7 @@ def _baselines_tab(baseline_state):
         headers=[
             "Configuration",
             "Points",
-            "Exact unit-distance edges",
+            "Exact edges",
             "Status",
         ],
         interactive=False,
@@ -1256,9 +1270,9 @@ def _explorer_tab(explorer_state):
     btn_validate = gr.Button("Validate Explorer Configuration")
     summary = gr.Markdown(elem_classes=["cc-wrap"])
     edges = gr.Dataframe(
-        headers=["i", "j"],
+        headers=["Edge", "Point A", "Point B"],
         interactive=False,
-        label="Exact unit-distance edges",
+        label="Exactly validated unit-distance edges",
         wrap=True,
     )
     with gr.Accordion("Technical JSON details (optional)", open=False):

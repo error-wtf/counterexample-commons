@@ -132,6 +132,8 @@ def test_explorer_presets_validate_and_visualize():
         assert state is not None
         assert "Exactly validated unit-distance edges" in summary
         assert isinstance(edges, list)
+        assert all(len(row) == 3 for row in edges)
+        assert all(str(row[1]).startswith("(") for row in edges)
         fig, plot_summary, plot_data = package_a_visualize_source(
             "Latest Explorer Result",
             5,
@@ -156,6 +158,19 @@ def test_explorer_malformed_input_is_controlled():
     assert edges == []
     assert "error" in data
     assert state is None
+
+
+def test_explorer_edge_rows_show_exact_endpoint_coordinates():
+    _summary, edges, _data, state = validate_explorer_text(
+        "0, 0\n1, 0\n1, 1\n0, 1",
+    )
+    assert state is not None
+    assert edges == [
+        [1, "(0, 0)", "(1, 0)"],
+        [2, "(0, 0)", "(0, 1)"],
+        [3, "(1, 0)", "(1, 1)"],
+        [4, "(1, 1)", "(0, 1)"],
+    ]
 
 
 def test_finite_reports_for_baseline_explorer_and_ai_are_real():
@@ -200,6 +215,9 @@ def test_shared_state_flows_from_baseline_and_explorer_to_export():
     )
     assert not preview.startswith("ERROR:")
     assert "Finite exact validation export only" in preview
+    assert "<details>" in preview
+    assert "Point Preview (16 of 121)" in preview
+    assert "Exact Edge Preview (16 of 82)" in preview
     assert Path(md_path).exists()
     assert Path(json_path).exists()
     assert details["secrets_displayed_or_exported"] == "NO"
