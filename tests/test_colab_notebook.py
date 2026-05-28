@@ -63,6 +63,7 @@ def test_complete_colab_is_secret_safe_public_demo():
     assert "colab-public-demo" in text
     assert "ENABLE_COLAB_OLLAMA = True" in text
     assert "ENABLE_COLAB_OLLAMA = False" in text
+    assert "ollama-archive-installer-v2" in text
     assert '"ollama", "pull"' in text
     assert "share=True" in text
 

@@ -175,7 +175,7 @@ The public `main` branch now contains **one complete, end-to-end research lab
 notebook**. It launches the same Gradio app and, by default, starts keyless
 Ollama Local inside the Colab VM:
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/Counterexample_Commons_Complete_Lab_Colab.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/Counterexample_Commons_Complete_Lab_Colab.ipynb?cacheBust=ollama-archive-installer-v2)
 
 Current status:
 
