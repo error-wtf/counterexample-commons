@@ -11,11 +11,11 @@ PROVIDER_DEFAULTS: dict[str, dict] = {
     },
     "ollama_cloud": {
         "env_var": "OLLAMA_API_KEY",
-        "default_model": "llama3.1",
+        "default_model": "llama3.1:8b",
     },
     "ollama_local": {
         "env_var": "",
-        "default_model": "llama3.1",
+        "default_model": "llama3.1:8b",
         "default_base_url": "http://localhost:11434",
     },
     "mistral": {

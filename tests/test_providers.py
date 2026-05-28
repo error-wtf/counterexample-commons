@@ -99,6 +99,28 @@ class TestProviderProtocol:
         assert called["url"] == "http://127.0.0.1:11434/api/tags"
         assert called["timeout"] == 2
 
+    def test_ollama_local_base_url_can_be_overridden(self, monkeypatch):
+        called = {}
+
+        class FakeResponse:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, exc_type, exc, tb):
+                return False
+
+        def fake_urlopen(req, timeout):
+            called["url"] = req.full_url
+            return FakeResponse()
+
+        monkeypatch.setenv("OLLAMA_BASE_URL", "http://ollama.test:11434")
+        monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
+        provider = OllamaLocalProvider()
+        assert provider.is_available() is True
+        assert called["url"] == "http://ollama.test:11434/api/tags"
+
 
 class TestMissingKeyBehavior:
     @pytest.mark.parametrize("name", [

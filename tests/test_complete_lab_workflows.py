@@ -26,6 +26,7 @@ from app.main import (
     overview_markdown,
     package_a_baseline_results,
     package_a_visualize_source,
+    preferred_provider_order,
     provider_connection_test,
     provider_comparison_run,
     provider_statuses,
@@ -331,6 +332,8 @@ def test_env_example_uses_supported_provider_variables_only():
     for line in text.splitlines():
         if line.endswith("_API_KEY="):
             assert line.split("=")[0] in supported
+    assert "OLLAMA_MODEL=llama3.1:8b" in text
+    assert "OLLAMA_BASE_URL=http://localhost:11434" in text
 
 
 def test_dot_env_is_gitignored():
@@ -401,6 +404,49 @@ def test_local_ollama_status_enables_full_local_ai_ui(monkeypatch):
     assert app_main.any_live_provider_configured(env) is True
     assert configured_provider_names(env) == ["ollama_local"]
     assert "LIVE AI CONFIGURED" in overview_markdown(env)
+
+
+def test_ollama_local_is_primary_when_multiple_providers_configured():
+    class FakeProvider:
+        def __init__(self, key_var="") -> None:
+            self.api_key_env_var = key_var
+
+        def is_available(self):
+            return True
+
+    class FakeRegistry:
+        def list_names(self):
+            return ["openai", "mistral", "ollama_local"]
+
+        def get(self, name):
+            if name == "openai":
+                return FakeProvider("OPENAI_API_KEY")
+            if name == "mistral":
+                return FakeProvider("MISTRAL_API_KEY")
+            return FakeProvider("")
+
+    env = EnvironmentStatus(
+        repo_root=ROOT,
+        local_env_file="FOUND",
+        providers={
+            "openai": "CONFIGURED",
+            "mistral": "CONFIGURED",
+            "ollama_cloud": "NOT_CONFIGURED",
+            "anthropic": "NOT_CONFIGURED",
+            "openrouter": "NOT_CONFIGURED",
+            "google_gemini": "NOT_CONFIGURED",
+        },
+    )
+    assert preferred_provider_order(["mistral", "ollama_local", "openai"]) == [
+        "ollama_local",
+        "openai",
+        "mistral",
+    ]
+    assert configured_provider_names(env, FakeRegistry()) == [
+        "ollama_local",
+        "openai",
+        "mistral",
+    ]
 
 
 def test_ai_candidate_validation_success_rejection_and_overclaims():

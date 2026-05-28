@@ -52,10 +52,10 @@ def test_public_demo_disables_everything():
     assert caps.google_drive is False
 
 
-def test_colab_private_disables_ollama_local():
+def test_colab_private_enables_colab_vm_ollama_local():
     caps = CAPABILITY_MATRIX[AppMode.COLAB_PRIVATE]
     assert caps.ai_candidate_lab is True
-    assert caps.ollama_local is False
+    assert caps.ollama_local is True
     assert caps.google_drive is False
 
 

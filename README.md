@@ -101,7 +101,25 @@ Exact Baselines, Explorer, Visualisierung, read-only claims and finite exports
 remain available; AI/provider actions report `NOT_CONFIGURED` and make no live
 request.
 
-For private local provider testing:
+The primary live AI path is **Ollama Local**. It does not need an API key; it
+only needs an Ollama server reachable from the runtime:
+
+```bash
+ollama serve
+ollama pull llama3.1:8b
+export OLLAMA_MODEL=llama3.1:8b
+python scripts/run_gradio_local.py --mode local-private --no-browser --port 7861
+```
+
+On PowerShell, use `$env:OLLAMA_MODEL="llama3.1:8b"` instead of `export`.
+If Ollama is running, the AI Candidate Lab defaults to `ollama_local`.
+
+To switch to a different local Ollama endpoint, set `OLLAMA_BASE_URL` before
+launch, for example `http://localhost:11434` or another trusted private host.
+To switch to a cloud provider, copy `.env.example` to `.env`, fill only the
+provider you want, restart the app and select that provider in the UI.
+
+For private cloud-provider testing:
 
 ```bash
 cp .env.example .env
@@ -153,7 +171,7 @@ validated public workflow.
 Local execution inside an existing repository checkout was incorrectly treated
 as evidence of fresh Google Colab functionality. It is not.
 
-The rescue branch now contains **one complete, end-to-end research lab
+The public `main` branch now contains **one complete, end-to-end research lab
 notebook** that launches the same Gradio app in safe no-key public-demo mode:
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/Counterexample_Commons_Complete_Lab_Colab.ipynb)
@@ -163,7 +181,9 @@ Current status:
 - Previous ten-notebook Colab layer: **deprecated / not validated**
 - New complete Colab lab: integrated as a no-key runtime test candidate
 - Fresh Google Colab runtime execution by the user: **awaiting validation**
-- Live provider/API workflow: not part of the public Colab demo
+- Optional keyless Ollama Local workflow: available inside the Colab runtime
+  when explicitly enabled in the notebook
+- Live API-key provider workflow: not part of the public Colab demo
 - Sawin n^{1.014}: SOURCE\_DOCUMENTED only, not locally reproduced
 
 The deprecated prototype notebooks remain in the repository under
@@ -173,6 +193,12 @@ The complete notebook clones `main` and starts the same local-first Gradio lab
 in `colab-public-demo` mode. It must not be read as evidence that the
 asymptotic OpenAI/Sawin theorem has been locally reproduced.
 
+Colab cannot see an Ollama server running on your desktop `localhost`.
+If you want keyless AI in Colab, set `ENABLE_COLAB_OLLAMA = True` in the
+notebook setup cell. The notebook then installs/starts Ollama inside the Colab
+VM, pulls `OLLAMA_MODEL` and launches the app in `colab-private` mode. This
+uses Colab runtime compute, not an API key.
+
 ## 8. Supported AI Providers (7)
 
 | Provider | Env Var | Local Private | Colab Private | Public Demo |
@@ -180,7 +206,7 @@ asymptotic OpenAI/Sawin theorem has been locally reproduced.
 | OpenAI | `OPENAI_API_KEY` | yes | yes | no |
 | OpenRouter | `OPENROUTER_API_KEY` | yes | yes | no |
 | Ollama Cloud | `OLLAMA_API_KEY` | yes | yes | no |
-| Ollama Local | *(none)* | yes | no | no |
+| Ollama Local | *(none)* | yes | yes, Colab VM only | no |
 | Mistral | `MISTRAL_API_KEY` | yes | yes | no |
 | Google Gemini | `GEMINI_API_KEY` | yes | yes | no |
 | Anthropic Claude | `ANTHROPIC_API_KEY` | yes | yes | no |

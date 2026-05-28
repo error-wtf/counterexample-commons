@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import urllib.error
 import urllib.request
 
@@ -14,9 +15,13 @@ class OllamaLocalProvider:
     """Adapter for local Ollama instance at localhost:11434."""
 
     def __init__(
-        self, base_url: str = "http://localhost:11434"
+        self, base_url: str | None = None,
     ) -> None:
-        self._base_url = base_url
+        self._base_url = (
+            base_url
+            or os.environ.get("OLLAMA_BASE_URL")
+            or "http://localhost:11434"
+        )
 
     @property
     def name(self) -> str:

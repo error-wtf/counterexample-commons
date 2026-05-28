@@ -66,7 +66,7 @@ CAPABILITY_MATRIX: dict[AppMode, Capabilities] = {
         provider_comparison=True,
         claim_registry_editable=False,
         export_full=True,
-        ollama_local=False,  # localhost = Colab VM, not user's PC
+        ollama_local=True,  # localhost = Colab VM Ollama, not user's PC
         secrets_loaded=True,
         share_link=False,
         google_drive=False,  # not mounted automatically

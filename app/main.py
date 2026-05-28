@@ -89,6 +89,16 @@ AI_EXPORT_BOUNDARY = (
     "validator. Validation applies only to this finite point configuration."
 )
 
+PRIMARY_PROVIDER_ORDER = [
+    "ollama_local",
+    "openai",
+    "openrouter",
+    "ollama_cloud",
+    "anthropic",
+    "google_gemini",
+    "mistral",
+]
+
 AI_VALIDATED = "AI_GENERATED_HYPOTHESIS_VALIDATED_FINITE_ONLY"
 AI_REJECTED = "AI_GENERATED_HYPOTHESIS_REJECTED_BY_EXACT_VALIDATOR"
 NOT_CONFIGURED_MESSAGE = (
@@ -677,6 +687,16 @@ def provider_statuses(
     return statuses
 
 
+def preferred_provider_order(names: list[str]) -> list[str]:
+    """Return providers in the app's deliberate default order."""
+    known = [name for name in PRIMARY_PROVIDER_ORDER if name in names]
+    extra = sorted(
+        name for name in names
+        if name not in PRIMARY_PROVIDER_ORDER
+    )
+    return known + extra
+
+
 def any_live_provider_configured(env_status: EnvironmentStatus) -> bool:
     """Return whether any live provider key is configured."""
     return (
@@ -692,10 +712,10 @@ def configured_provider_names(
     """Return provider names that can be explicitly selected now."""
     registry = registry or build_default_registry()
     statuses = provider_statuses(env_status, registry)
-    return [
+    return preferred_provider_order([
         name for name in registry.list_names()
         if statuses.get(name) == "CONFIGURED"
-    ]
+    ])
 
 
 def overview_markdown(
@@ -760,7 +780,8 @@ def settings_markdown(
     statuses = provider_statuses(env_status)
     provider_lines = [
         f"- **{name}:** {status}"
-        for name, status in sorted(statuses.items())
+        for name in preferred_provider_order(list(statuses))
+        for status in [statuses[name]]
     ]
     return "\n".join([
         "## Settings & Configuration",
@@ -789,12 +810,13 @@ def no_key_ai_markdown() -> str:
         "",
         "NO LIVE PROVIDER CONFIGURED",
         "",
-        "No API key has been configured for this session.",
+        "No local Ollama endpoint or API-key provider is configured for this "
+        "session.",
         "",
         "To run real AI candidate tests locally:",
-        "1. Copy `.env.example` to `.env`.",
-        "2. Enter your own supported provider key in `.env`.",
-        "3. Restart the Gradio app in local-private mode.",
+        "1. Start Ollama locally and pull the configured `OLLAMA_MODEL`, or "
+        "copy `.env.example` to `.env` for a cloud provider.",
+        "2. Restart the Gradio app in local-private mode.",
         "",
         "No live request has been sent.",
         "Exact finite baseline, explorer, visualisation and export "
@@ -807,14 +829,15 @@ def no_key_provider_markdown(env_status: EnvironmentStatus) -> str:
     statuses = provider_statuses(env_status)
     lines = [
         f"- {name}: {status}"
-        for name, status in sorted(statuses.items())
+        for name in preferred_provider_order(list(statuses))
+        for status in [statuses[name]]
     ]
     return "\n".join([
         "## Provider Comparison",
         "",
         "No providers configured for live comparison.",
-        "Configure one or more supported providers locally via `.env` and "
-        "restart the app.",
+        "Start local Ollama or configure one or more supported providers "
+        "locally via `.env` and restart the app.",
         "No mock results are shown as live provider results.",
         "",
         *lines,
@@ -1412,7 +1435,7 @@ def _ai_candidate_lab_tab(
 ):
     configured = any_live_provider_configured(env_status)
     registry = build_default_registry()
-    provider_names = registry.list_names()
+    provider_names = preferred_provider_order(registry.list_names())
     configured_names = configured_provider_names(env_status, registry)
     if not configured:
         gr.Markdown(no_key_ai_markdown())
