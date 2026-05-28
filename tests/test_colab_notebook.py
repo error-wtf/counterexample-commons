@@ -61,6 +61,7 @@ def test_complete_colab_is_secret_safe_public_demo():
 
     assert "Provider credential environment variables are present" in text
     assert "colab-public-demo" in text
+    assert "ENABLE_COLAB_OLLAMA = True" in text
     assert "ENABLE_COLAB_OLLAMA = False" in text
     assert '"ollama", "pull"' in text
     assert "share=True" in text
@@ -69,10 +70,13 @@ def test_complete_colab_is_secret_safe_public_demo():
 def test_complete_colab_has_optional_keyless_ollama_mode():
     text = _all_source_text()
     assert "AppMode.COLAB_PRIVATE" in text
+    assert "Keyless Ollama Local workflow" in text
     assert "OLLAMA_MODEL" in text
     assert "OLLAMA_BASE_URL" in text
     assert "Colab VM" in text
     assert "desktop `localhost`" in text
+    assert "shutil.which(\"ollama\")" in text
+    assert "_ollama_server_ready" in text
 
 
 def test_complete_colab_scientific_boundaries():

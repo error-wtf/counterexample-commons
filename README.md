@@ -163,7 +163,7 @@ asymptotic bounds.
 ![Grid Scaling](docs/images/grid_scaling.png)
 <br>*Grid k×k scaling: Points vs edges → ratio approaches 2*
 
-## 7c. Google Colab Research Lab — Complete Lab Candidate
+## 7c. Google Colab Research Lab — Complete Lab
 
 The previously published multi-notebook Colab layer has been **withdrawn** as a
 validated public workflow.
@@ -172,32 +172,32 @@ Local execution inside an existing repository checkout was incorrectly treated
 as evidence of fresh Google Colab functionality. It is not.
 
 The public `main` branch now contains **one complete, end-to-end research lab
-notebook** that launches the same Gradio app in safe no-key public-demo mode:
+notebook**. It launches the same Gradio app and, by default, starts keyless
+Ollama Local inside the Colab VM:
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/error-wtf/counterexample-commons/blob/main/notebooks/Counterexample_Commons_Complete_Lab_Colab.ipynb)
 
 Current status:
 
 - Previous ten-notebook Colab layer: **deprecated / not validated**
-- New complete Colab lab: integrated as a no-key runtime test candidate
-- Fresh Google Colab runtime execution by the user: **awaiting validation**
-- Optional keyless Ollama Local workflow: available inside the Colab runtime
-  when explicitly enabled in the notebook
-- Live API-key provider workflow: not part of the public Colab demo
+- Single complete Colab lab: integrated as the public notebook entry point
+- Default Colab AI path: keyless Ollama Local inside the Colab VM
+- Finite-only fallback: set `ENABLE_COLAB_OLLAMA = False` in the notebook
+- Live API-key provider workflow: not part of the public Colab notebook
 - Sawin n^{1.014}: SOURCE\_DOCUMENTED only, not locally reproduced
 
 The deprecated prototype notebooks remain in the repository under
 `notebooks/` for reference but are not advertised as public workflows.
 
-The complete notebook clones `main` and starts the same local-first Gradio lab
-in `colab-public-demo` mode. It must not be read as evidence that the
-asymptotic OpenAI/Sawin theorem has been locally reproduced.
+The complete notebook clones `main` and starts the same local-first Gradio lab.
+It must not be read as evidence that the asymptotic OpenAI/Sawin theorem has
+been locally reproduced.
 
 Colab cannot see an Ollama server running on your desktop `localhost`.
-If you want keyless AI in Colab, set `ENABLE_COLAB_OLLAMA = True` in the
-notebook setup cell. The notebook then installs/starts Ollama inside the Colab
-VM, pulls `OLLAMA_MODEL` and launches the app in `colab-private` mode. This
-uses Colab runtime compute, not an API key.
+By default the notebook installs/starts Ollama inside the Colab VM, pulls
+`OLLAMA_MODEL` and launches the app in `colab-private` mode. This uses Colab
+runtime compute, not an API key. Set `ENABLE_COLAB_OLLAMA = False` for a
+finite-only `colab-public-demo` run.
 
 ## 8. Supported AI Providers (7)
 
